@@ -42,7 +42,7 @@ class GccArmNoneEabi < Formula
   depends_on 'libtool'
 
   bottle do
-    url https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-4.6-2012q1.lion.bottle.tar.gz => :lion
+    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-4.6-2012q1.lion.bottle.tar.gz' => :lion
     sha1 '8ff964531941ad34562fe0edd9e1bbfcdc0c4009' => :lion
   end
 
