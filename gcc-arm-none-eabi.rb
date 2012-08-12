@@ -12,6 +12,7 @@ class GccArmNoneEabi < Formula
   bottle do
     url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-20120614.lion.bottle.tar.gz'
     sha1 '753b7d8a3517be6d5f684dbfcd947a2925955c44' => :lion
+    sha1 '753b7d8a3517be6d5f684dbfcd947a2925955c44' => :mountainlion
   end
 
   def patches
