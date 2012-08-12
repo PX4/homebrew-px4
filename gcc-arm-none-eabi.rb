@@ -1,49 +1,17 @@
 require 'formula'
 
-class GccArmEmbeddedDownloadStrategy < CurlDownloadStrategy
-
-  def _fetch
-
-    # The base URL is a lie, but we keep it because the resulting cached 
-    # distribution file has the 'right' suffix.  Here we need the actual
-    # filename base on the server...
-    base_url = @url.to_s.gsub('.tar.bz2', '.7z')
-
-    # We fetch two partfiles, identified by suffix.
-    part_file = @tarball_path.to_s.gsub('.tar.bz2', '.7z')
-
-    # Fetch the partfiles
-    curl base_url + '.001', '--output', part_file + '.001'
-    curl base_url + '.002', '--output', part_file + '.002'
-
-    # Unpack the distribution archives, netting the real archive
-    sevenzip = Pathname.new('/usr/local/bin/7z')
-    system sevenzip, 'x', '-y', '-o'+@tarball_path.dirname, part_file + '.001'
-
-    # Delete the partfiles to avoid cluttering the cache
-    File.delete(part_file + '.001', part_file + '.002')
-
-    # The archive has the 'wrong' name, since Homebrew has some definite ideas about
-    # what the archive should be called and ARM disagree...
-    archname = Pathname.new(@tarball_path.dirname + File.basename(@url))
-    archname.rename(@tarball_path)
-
-  end
-end
-
 class GccArmNoneEabi < Formula
   homepage 'https://launchpad.net/gcc-arm-embdded'
-  version '4.6-2012q1'
-  url 'https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q1-update/+download/gcc-arm-none-eabi-4_6-2012q1-20120316-src.tar.bz2', :using => GccArmEmbeddedDownloadStrategy
-  md5 '8fb1e9a2dda91c63a6b11537ce001817'
+  version '20120614'
+  url 'https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q2-update/+download/gcc-arm-none-eabi-4_6-2012q2-20120614-src.tar.bz2'
+  sha1 'f77c7fb6a77b432989d9544f0269367927c2d079'
 
-  depends_on 'p7zip'
   depends_on 'automake'
   depends_on 'libtool'
 
   bottle do
-    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-4.6-2012q1.lion.bottle.tar.gz'
-    sha1 '8ff964531941ad34562fe0edd9e1bbfcdc0c4009'
+    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-20120614.lion.bottle.tar.gz'
+    sha1 '753b7d8a3517be6d5f684dbfcd947a2925955c44' => :lion
   end
 
   def patches
@@ -90,8 +58,9 @@ class GccArmNoneEabi < Formula
 end
 
 __END__
---- ../build-common.sh  2011-12-07 08:56:12.000000000 -0800
-+++ ./build-common.sh   2012-01-27 20:08:13.000000000 -0800
+diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh ./build-common.sh
+--- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh    2012-08-11 16:20:55.000000000 -0700
++++ ./build-common.sh   2012-08-11 17:15:41.000000000 -0700
 @@ -196,9 +196,9 @@
  ROOT=`pwd`
  SRCDIR=$ROOT/src
@@ -118,8 +87,9 @@ __END__
  HOST_MINGW=i586-mingw32
  HOST_MINGW_TOOL=i586-mingw32msvc
  TARGET=arm-none-eabi
---- ../build-prerequisites.sh   2011-12-07 08:56:12.000000000 -0800
-+++ ./build-prerequisites.sh    2012-01-27 20:33:15.000000000 -0800
+diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-prerequisites.sh ./build-prerequisites.sh
+--- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-prerequisites.sh 2012-08-11 16:20:55.000000000 -0700
++++ ./build-prerequisites.sh    2012-08-11 17:03:57.000000000 -0700
 @@ -35,7 +35,7 @@
  
  exec < /dev/null
@@ -129,21 +99,26 @@ __END__
  . $script_path/build-common.sh
  
  # This file contains the sequence of commands used to build the prerequisites
-@@ -49,7 +49,11 @@
+@@ -49,7 +49,7 @@
  if [ $# -gt 1 ] ; then
      usage
  fi
 -skip_mingw32=no
-+if [ `uname` == Darwin ]; then
-+    skip_mingw32=yes
-+else
-+    skip_mingw32=no
-+fi
++skip_mingw32=yes
  for ac_arg; do
      case $ac_arg in
          --skip_mingw32)
---- ../build-toolchain.sh   2011-12-07 08:56:12.000000000 -0800
-+++ ./build-toolchain.sh    2012-01-27 21:08:15.000000000 -0800
+@@ -140,6 +140,7 @@
+     --host=$HOST_LINUX \
+     --target=$TARGET \
+     --prefix=$BUILDDIR_LINUX/host-libs/usr \
++    --enable-interfaces='c c++' \
+     --disable-shared \
+     --disable-nls \
+     --with-libgmp-prefix=$BUILDDIR_LINUX/host-libs/usr
+diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh ./build-toolchain.sh
+--- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh 2012-08-11 16:20:55.000000000 -0700
++++ ./build-toolchain.sh    2012-08-11 17:39:44.000000000 -0700
 @@ -35,7 +35,7 @@
  
  exec < /dev/null
@@ -153,20 +128,16 @@ __END__
  . $script_path/build-common.sh
  
  # This file contains the sequence of commands used to build the ARM EABI toolchain.
-@@ -48,7 +48,11 @@
+@@ -48,7 +48,7 @@
  if [ $# -gt 2 ] ; then
      usage
  fi
 -skip_mingw32=no
-+if [ `uname` == Darwin ]; then
-+    skip_mingw32=yes
-+else
-+    skip_mingw32=no
-+fi
++skip_mingw32=yes
  DEBUG_BUILD_OPTIONS=no
  for ac_arg; do
      case $ac_arg in
-@@ -95,7 +99,8 @@
+@@ -95,7 +95,8 @@
      make -j$JOBS
  fi
  
@@ -176,14 +147,15 @@ __END__
  restoreenv
  popd
  
-@@ -132,20 +137,20 @@
+@@ -132,20 +133,20 @@
      --with-ppl=$BUILDDIR_LINUX/host-libs/usr \
      --with-cloog=$BUILDDIR_LINUX/host-libs/usr \
      --with-libelf=$BUILDDIR_LINUX/host-libs/usr \
 -    "--with-host-libstdcxx=-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 +    "--with-host-libstdcxx=-lstdc++" \
      "--with-pkgversion=$PKGVERSION" \
-     --with-extra-multilibs=armv6-m,armv7-m,armv7e-m,armv7-r
+-    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m,armv7-r
++    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m
  
  make -j$JOBS all-gcc
  
@@ -200,15 +172,15 @@ __END__
  popd
  
  echo Task [1-10] /$HOST_LINUX/newlib/
-@@ -164,25 +169,16 @@
+@@ -164,25 +165,16 @@
      --disable-newlib-supplied-syscalls \
      --disable-nls
  
 -make -j$JOBS
--
--make htmldir=$INSTALLDIR_LINUX/share/doc/html pdfdir=$INSTALLDIR_LINUX/share/doc/pdf infodir=$INSTALLDIR_LINUX/share/doc/info mandir=$INSTALLDIR_LINUX/share/doc/man install
 +make -j$JOBS 
  
+-make htmldir=$INSTALLDIR_LINUX/share/doc/html pdfdir=$INSTALLDIR_LINUX/share/doc/pdf infodir=$INSTALLDIR_LINUX/share/doc/info mandir=$INSTALLDIR_LINUX/share/doc/man install
+-
 -make pdf
 -mkdir -p $INSTALLDIR_LINUX/share/doc/pdf
 -cp $BUILDDIR_LINUX/newlib/arm-none-eabi/newlib/libc/libc.pdf $INSTALLDIR_LINUX/share/doc/pdf/libc.pdf
@@ -229,16 +201,19 @@ __END__
  ln -s . $INSTALLDIR_LINUX/arm-none-eabi/usr
  
  rm -rf $BUILDDIR_LINUX/gcc-final && mkdir -p $BUILDDIR_LINUX/gcc-final
-@@ -214,7 +210,7 @@
+@@ -214,9 +206,9 @@
      --with-ppl=$BUILDDIR_LINUX/host-libs/usr \
      --with-cloog=$BUILDDIR_LINUX/host-libs/usr \
      --with-libelf=$BUILDDIR_LINUX/host-libs/usr \
 -    "--with-host-libstdcxx=-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
 +    "--with-host-libstdcxx=-lstdc++" \
      "--with-pkgversion=$PKGVERSION" \
-     --with-extra-multilibs=armv6-m,armv7-m,armv7e-m,armv7-r
+-    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m,armv7-r
++    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m
  
-@@ -224,7 +220,7 @@
+ if [ "x$DEBUG_BUILD_OPTIONS" != "xno" ] ; then
+     make CFLAGS="$DEBUG_BUILD_OPTIONS" -j$JOBS
+@@ -224,7 +216,7 @@
      make -j$JOBS
  fi
  
@@ -247,7 +222,7 @@ __END__
  
  pushd $INSTALLDIR_LINUX
  rm -rf bin/arm-none-eabi-gccbug
-@@ -233,7 +229,7 @@
+@@ -233,7 +225,7 @@
      rm -rf $libiberty_lib
  done
  rm -rf ./lib/libiberty.a
@@ -256,7 +231,7 @@ __END__
  popd
  
  rm -f $INSTALLDIR_LINUX/arm-none-eabi/usr
-@@ -263,7 +259,8 @@
+@@ -263,7 +255,8 @@
      make -j$JOBS
  fi
  
@@ -266,7 +241,7 @@ __END__
  restoreenv
  popd
  
-@@ -322,8 +319,6 @@
+@@ -322,8 +315,6 @@
  cp $ROOT/$LICENSE_FILE $INSTALLDIR_LINUX/
  ln -s $INSTALLDIR_LINUX $INSTALL_PACKAGE_NAME
  tar cjf $PACKAGEDIR/$PACKAGE_NAME.tar.bz2   \
@@ -275,7 +250,7 @@ __END__
      --exclude=host-$HOST_LINUX              \
      --exclude=host-$HOST_MINGW              \
      $INSTALL_PACKAGE_NAME/arm-none-eabi     \
-@@ -334,9 +329,15 @@
+@@ -334,9 +325,15 @@
      $INSTALL_PACKAGE_NAME/$RELEASE_FILE     \
      $INSTALL_PACKAGE_NAME/$README_FILE      \
      $INSTALL_PACKAGE_NAME/$LICENSE_FILE
@@ -291,15 +266,25 @@ __END__
  # skip building mingw32 toolchain if "--skip_mingw32" specified
  # this huge if statement controls all $BUILDDIR_MINGW tasks till "task [3-1]"
  if [ "x$skip_mingw32" != "xyes" ] ; then
---- ../readme.txt   2011-12-21 18:21:58.000000000 -0800
-+++ ./readme.txt    2012-01-27 22:03:35.000000000 -0800
-@@ -1,34 +1,27 @@
+@@ -439,7 +436,7 @@
+     --with-libelf=$BUILDDIR_MINGW/host-libs/usr \
+     "--with-host-libstdcxx=-static-libgcc -Wl,-Bstatic,-lstdc++,-Bdynamic -lm" \
+     "--with-pkgversion=$PKGVERSION" \
+-    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m,armv7-r
++    --with-extra-multilibs=armv6-m,armv7-m,armv7e-m
+ 
+ make -j$JOBS all-gcc
+ 
+diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/readme.txt ./readme.txt
+--- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/readme.txt 2012-08-11 16:20:55.000000000 -0700
++++ ./readme.txt    2012-08-11 17:10:08.000000000 -0700
+@@ -1,34 +1,26 @@
  GNU Tools for ARM Embedded Processors
  
  Table of Contents
 -* Installing executables on Linux
 -* Installing executables on Windows 
-+* Installing executables on Mac OS X
++* Installing executables on OS X
  * Invoking GCC
  * Architecture options usage
  * C Libraries usage
@@ -307,10 +292,10 @@ __END__
  * Startup code
  
 -* Installing executables on Linux *
-+* Installing executables on Mac OS X *
++* Installing executables on OS X *
  Unpack the tarball to the target directory, like this:
  $ cd target_dir && tar xjf arm-none-eabi-gcc-4_x-YYYYMMDD.tar.bz2
- 
+-
 -* Installing executables on Windows *
 -Run the installer (arm-none-eabi-gcc-4_x-YYYYMMDD.exe) and follow the
 -instructions.
@@ -318,7 +303,7 @@ __END__
  
  * Invoking GCC *
 -On Linux, either invoke with the complete path like this:
-+On Mac OS X, either invoke with the complete path like this:
++On OS X, either invoke with the complete path like this:
  $ target_dir/arm-none-eabi-gcc-4_x/bin/arm-none-eabi-gcc
  
  Or set path like this:
@@ -332,9 +317,10 @@ __END__
  * Architecture options usage *
  
  This toolchain is built and optimized for Cortex-R/M bare metal development.
---- ../release.txt  2012-03-31 21:30:25.000000000 -0700
-+++ ./release.txt 2012-03-31 21:31:19.000000000 -0700
-@@ -5,54 +5,10 @@
+diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt ./release.txt
+--- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt    2012-08-11 16:20:55.000000000 -0700
++++ ./release.txt   2012-08-11 17:11:45.000000000 -0700
+@@ -5,52 +5,12 @@
  *************************************************
  
  This release includes the following items:
@@ -342,19 +328,18 @@ __END__
 -* Bare metal EABI pre-built binaries for running on a Linux host
 -* Source code package (together with build scripts and instructions to setup
 -  build environment), composed of:
--  * gcc : ARM/embedded-4_6-branch revision 185452
+-  * gcc : ARM/embedded-4_6-branch revision 188521
 -    http://gcc.gnu.org/svn/gcc/branches/ARM/embedded-4_6-branch/
--
++* Bare metal EABI pre-built binaries for running on an OS X
+ 
 -  * binutils : 2.21 with mainline backports
 -    git://sourceware.org/git/binutils.git
--    SHA: 47639bbc8b5fd6cf58aeefafbc99e0b1227d357c
 -
 -  * newlib : 1.19 with mainline backports
 -    ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz
 -
 -  * gdb : 7.3.1 with mainline backports, without target sim support
 -    git://sourceware.org/git/gdb.git
--    SHA: 5c912c6308dbb9c3163b60381c8f3ee037e28d2b
 -
 -  * cloog-ppl 0.15.11 : 
 -    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-ppl-0.15.11.tar.gz
@@ -380,14 +365,14 @@ __END__
 -
 -  * ncurses 5.9 :
 -    http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
-+* Bare metal EABI pre-built binaries for running on a Mac OS X host
++Source code may be obtained from https://launchpad.net/gcc-arm-embedded
  
  Supported hosts:
--* Windows 32/64 bits (with installer)
+-* Windows XP/7 32/64 bits (with installer)
 -* Linux 32/64 bits (tarball)
 -  - Ubuntu 8.x/9.x/10.x
 -  - RHEL 4/5
-+* Mac OS X 10.6 or later
++* OS X 10.6 or later.
  
  Supported target OS:
  * Bare metal EABI only
