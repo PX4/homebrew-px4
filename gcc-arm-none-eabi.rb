@@ -2,17 +2,28 @@ require 'formula'
 
 class GccArmNoneEabi < Formula
   homepage 'https://launchpad.net/gcc-arm-embdded'
-  version '20120614'
-  url 'https://launchpad.net/gcc-arm-embedded/4.6/4.6-2012-q2-update/+download/gcc-arm-none-eabi-4_6-2012q2-20120614-src.tar.bz2'
-  sha1 'f77c7fb6a77b432989d9544f0269367927c2d079'
+  version '20121016'
+  url 'https://launchpadlibrarian.net/121696657/gcc-arm-none-eabi-4_6-2012q4-20121016-src.tar.bz2'
+  sha1 '13a5b3ddf57b69a494471b5a3024ce3aebf3772e'
 
-  depends_on 'automake'
-  depends_on 'libtool'
+  # suppress "The build-tool has reset ENV. --env=std required."
+  # Must be after options and before depends_on
+  env :std
 
+  # try to only get deps when building
+  depends_on 'automake' => :build
+  depends_on 'libtool' => :build
+
+  #
+  # To build the bottle:
+  #
+  # > brew install --build-bottle gcc-arm-none-eabi
+  # > brew bottle gcc-arm-none-eabi
+  #
   bottle do
-    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-20120614.lion.bottle.tar.gz'
-    sha1 '753b7d8a3517be6d5f684dbfcd947a2925955c44' => :lion
-    sha1 '753b7d8a3517be6d5f684dbfcd947a2925955c44' => :mountainlion
+    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-20121016.mountainlion.bottle.tar.gz'
+    sha1 'ca215eecd99410d69b4b8a5f72b31b18166cb1a4' => :lion
+    sha1 'ca215eecd99410d69b4b8a5f72b31b18166cb1a4' => :mountainlion
   end
 
   def patches
@@ -59,9 +70,9 @@ class GccArmNoneEabi < Formula
 end
 
 __END__
-diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh ./build-common.sh
---- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh    2012-08-11 16:20:55.000000000 -0700
-+++ ./build-common.sh   2012-08-11 17:15:41.000000000 -0700
+diff -u ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-common.sh ./build-common.sh
+--- ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-common.sh   2012-11-23 20:31:23.000000000 -0800
++++ ./build-common.sh   2012-11-23 20:31:36.000000000 -0800
 @@ -196,9 +196,9 @@
  ROOT=`pwd`
  SRCDIR=$ROOT/src
@@ -74,7 +85,7 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh ./build
  INSTALLDIR_MINGW=$ROOT/install-mingw
  
  PACKAGEDIR=$ROOT/pkg
-@@ -255,10 +255,10 @@
+@@ -253,10 +253,10 @@
  LICENSE_FILE=license.txt
  GCC_VER=`cat $SRCDIR/$GCC/gcc/BASE-VER`
  GCC_VER_NAME=`echo $GCC_VER | cut -d'.' -f1,2 | sed -e 's/\./_/g'`
@@ -88,9 +99,9 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-common.sh ./build
  HOST_MINGW=i586-mingw32
  HOST_MINGW_TOOL=i586-mingw32msvc
  TARGET=arm-none-eabi
-diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-prerequisites.sh ./build-prerequisites.sh
---- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-prerequisites.sh 2012-08-11 16:20:55.000000000 -0700
-+++ ./build-prerequisites.sh    2012-08-11 17:03:57.000000000 -0700
+diff -u ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-prerequisites.sh ./build-prerequisites.sh
+--- ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-prerequisites.sh    2012-11-23 20:31:23.000000000 -0800
++++ ./build-prerequisites.sh    2012-11-23 20:31:36.000000000 -0800
 @@ -35,7 +35,7 @@
  
  exec < /dev/null
@@ -116,10 +127,10 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-prerequisites.sh 
 +    --enable-interfaces='c c++' \
      --disable-shared \
      --disable-nls \
-     --with-libgmp-prefix=$BUILDDIR_LINUX/host-libs/usr
-diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh ./build-toolchain.sh
---- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh 2012-08-11 16:20:55.000000000 -0700
-+++ ./build-toolchain.sh    2012-08-11 17:39:44.000000000 -0700
+     --with-gmp-prefix=$BUILDDIR_LINUX/host-libs/usr
+diff -u ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-toolchain.sh ./build-toolchain.sh
+--- ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/build-toolchain.sh    2012-11-23 20:31:23.000000000 -0800
++++ ./build-toolchain.sh    2012-11-23 20:35:14.000000000 -0800
 @@ -35,7 +35,7 @@
  
  exec < /dev/null
@@ -172,13 +183,10 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh ./bu
 +test -d include && rmdir include
  popd
  
- echo Task [1-10] /$HOST_LINUX/newlib/
-@@ -164,25 +165,16 @@
-     --disable-newlib-supplied-syscalls \
-     --disable-nls
+ echo Task [III-2] /$HOST_LINUX/newlib/
+@@ -166,23 +167,14 @@
  
--make -j$JOBS
-+make -j$JOBS 
+ make -j$JOBS
  
 -make htmldir=$INSTALLDIR_LINUX/share/doc/html pdfdir=$INSTALLDIR_LINUX/share/doc/pdf infodir=$INSTALLDIR_LINUX/share/doc/info mandir=$INSTALLDIR_LINUX/share/doc/man install
 -
@@ -196,7 +204,7 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh ./bu
  popd
  restoreenv
  
- echo Task [1-11] /$HOST_LINUX/gcc-final/
+ echo Task [III-3] /$HOST_LINUX/gcc-final/
  rm -f $INSTALLDIR_LINUX/arm-none-eabi/usr
 +mkdir -p $INSTALLDIR_LINUX/arm-none-eabi
  ln -s . $INSTALLDIR_LINUX/arm-none-eabi/usr
@@ -276,10 +284,10 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/build-toolchain.sh ./bu
  
  make -j$JOBS all-gcc
  
-diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/readme.txt ./readme.txt
---- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/readme.txt 2012-08-11 16:20:55.000000000 -0700
-+++ ./readme.txt    2012-08-11 17:10:08.000000000 -0700
-@@ -1,34 +1,26 @@
+diff -u ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/readme.txt ./readme.txt
+--- ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/readme.txt    2012-11-23 20:31:23.000000000 -0800
++++ ./readme.txt    2012-11-23 20:38:57.000000000 -0800
+@@ -1,24 +1,20 @@
  GNU Tools for ARM Embedded Processors
  
  Table of Contents
@@ -295,33 +303,23 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/readme.txt ./readme.txt
 -* Installing executables on Linux *
 +* Installing executables on OS X *
  Unpack the tarball to the target directory, like this:
- $ cd target_dir && tar xjf arm-none-eabi-gcc-4_x-YYYYMMDD.tar.bz2
+ $ cd target_dir && tar xjf gcc-arm-none-eabi-*-yyyymmdd.tar.bz2
 -
 -* Installing executables on Windows *
--Run the installer (arm-none-eabi-gcc-4_x-YYYYMMDD.exe) and follow the
+-Run the installer (gcc-arm-none-eabi-*-yyyymmdd.exe) and follow the
 -instructions.
 +Note that the HTML and PDF documentation is not included in this distribution.
  
  * Invoking GCC *
 -On Linux, either invoke with the complete path like this:
 +On OS X, either invoke with the complete path like this:
- $ target_dir/arm-none-eabi-gcc-4_x/bin/arm-none-eabi-gcc
+ $ target_dir/gcc-arm-none-eabi-*/bin/arm-none-eabi-gcc
  
  Or set path like this:
- $ export PATH=$PATH:target_dir/arm-none-eabi-gcc-4_x/bin/arm-none-eabi-gcc/bin
- $ arm-none-eabi-gcc
- 
--On Windows (although the above approaches also work), it can be more
--convenient to either have the installer register environment variables, or run
--INSTALL_DIR\bin\gccvar.bat to set environment variables for the current cmd. 
--
- * Architecture options usage *
- 
- This toolchain is built and optimized for Cortex-R/M bare metal development.
-diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt ./release.txt
---- ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt    2012-08-11 16:20:55.000000000 -0700
-+++ ./release.txt   2012-08-11 17:11:45.000000000 -0700
-@@ -5,52 +5,12 @@
+diff -u ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/release.txt ./release.txt
+--- ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/release.txt   2012-11-23 20:31:23.000000000 -0800
++++ ./release.txt   2012-11-23 20:37:54.000000000 -0800
+@@ -5,51 +5,11 @@
  *************************************************
  
  This release includes the following items:
@@ -329,18 +327,19 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt ./release.t
 -* Bare metal EABI pre-built binaries for running on a Linux host
 -* Source code package (together with build scripts and instructions to setup
 -  build environment), composed of:
--  * gcc : ARM/embedded-4_6-branch revision 188521
+-  * gcc : ARM/embedded-4_6-branch revision 192487
 -    http://gcc.gnu.org/svn/gcc/branches/ARM/embedded-4_6-branch/
-+* Bare metal EABI pre-built binaries for running on an OS X
- 
+-
 -  * binutils : 2.21 with mainline backports
 -    git://sourceware.org/git/binutils.git
+-    branch: binutils-2_21-branch@47639bbc8b5fd6cf58aeefafbc99e0b1227d357c
 -
 -  * newlib : 1.19 with mainline backports
 -    ftp://sources.redhat.com/pub/newlib/newlib-1.19.0.tar.gz
 -
 -  * gdb : 7.3.1 with mainline backports, without target sim support
 -    git://sourceware.org/git/gdb.git
+-    branch: gdb_7_3-branch@5c912c6308dbb9c3163b60381c8f3ee037e28d2b
 -
 -  * cloog-ppl 0.15.11 : 
 -    ftp://gcc.gnu.org/pub/gcc/infrastructure/cloog-ppl-0.15.11.tar.gz
@@ -363,10 +362,8 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt ./release.t
 -
 -  * zlib 1.2.5 with makefile patch : 
 -    http://sourceforge.net/projects/libpng/files/zlib/1.2.5/zlib-1.2.5.tar.bz2/download
--
--  * ncurses 5.9 :
--    http://ftp.gnu.org/pub/gnu/ncurses/ncurses-5.9.tar.gz
-+Source code may be obtained from https://launchpad.net/gcc-arm-embedded
++* Bare metal EABI pre-built binaries for running on an OS X
++* Source code may be obtained from https://launchpad.net/gcc-arm-embedded
  
  Supported hosts:
 -* Windows XP/7 32/64 bits (with installer)
@@ -377,3 +374,4 @@ diff -u ../../orig/gcc-arm-none-eabi-4_6-2012q2-20120614/release.txt ./release.t
  
  Supported target OS:
  * Bare metal EABI only
+Common subdirectories: ../orig/gcc-arm-none-eabi-4_6-2012q4-20121016/src and ./src
