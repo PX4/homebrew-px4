@@ -2,7 +2,7 @@ require 'formula'
 
 class Genromfs < Formula
   homepage ''
-  url 'http://voxel.dl.sourceforge.net/project/romfs/genromfs/0.5.2/genromfs-0.5.2.tar.gz'
+  url 'http://downloads.sourceforge.net/project/romfs/genromfs/0.5.2/genromfs-0.5.2.tar.gz'
   sha1 '27615b9de3a020084065b88b3ec74232ef268cf8'
 
   def install
