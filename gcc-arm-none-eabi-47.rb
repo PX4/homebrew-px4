@@ -1,6 +1,6 @@
 require 'formula'
 
-class GccArmNoneEabi < Formula
+class GccArmNoneEabi47 < Formula
   homepage 'https://launchpad.net/gcc-arm-embdded'
   version '20130313'
   url 'https://launchpadlibrarian.net/135590305/gcc-arm-none-eabi-4_7-2013q1-20130313-mac.tar.bz2'
