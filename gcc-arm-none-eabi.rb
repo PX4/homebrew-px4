@@ -20,10 +20,16 @@ class GccArmNoneEabi < Formula
   # > brew install --build-bottle gcc-arm-none-eabi
   # > brew bottle gcc-arm-none-eabi
   #
+  # Replace the DSL here with the output from 'brew bottle' and add:
+  #
+  #  root_url 'https://pixhawk.ethz.ch/px4/_media/downloads'
+  #
+  # Take the bottle archive and upload to the PX4 wiki.
+  #
+  #
   bottle do
-    url 'https://github.com/downloads/PX4/homebrew-px4/gcc-arm-none-eabi-20121016.mountainlion.bottle.tar.gz'
-    sha1 'ca215eecd99410d69b4b8a5f72b31b18166cb1a4' => :lion
-    sha1 'ca215eecd99410d69b4b8a5f72b31b18166cb1a4' => :mountainlion
+    root_url 'https://pixhawk.ethz.ch/px4/_media/downloads'
+    sha1 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mountain_lion
   end
 
   def patches
