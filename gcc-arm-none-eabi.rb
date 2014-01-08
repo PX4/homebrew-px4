@@ -30,6 +30,7 @@ class GccArmNoneEabi < Formula
   bottle do
     root_url 'https://pixhawk.ethz.ch/px4/_media/downloads'
     sha1 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mountain_lion
+    sha1 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mavericks
   end
 
   def patches
