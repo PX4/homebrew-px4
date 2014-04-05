@@ -11,6 +11,12 @@ class KconfigFrontends < Formula
   depends_on 'autoconf' => :build
   depends_on 'libtool' => :build
 
+  bottle do
+    #cellar :any
+    root_url 'http://pixhawk.org/_media/downloads'
+    sha1 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :mavericks
+  end
+
   def patches
     DATA
   end
