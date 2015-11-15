@@ -16,6 +16,7 @@ class KconfigFrontends < Formula
     root_url 'http://pixhawk.org/_media/downloads'
     sha1 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :mavericks
     sha1 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :yosemite
+    sha1 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :el_capitan
   end
 
   def patches
