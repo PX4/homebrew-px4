@@ -4,7 +4,7 @@ class GccArmNoneEabi46 < Formula
   homepage 'https://launchpad.net/gcc-arm-embedded'
   version '20121016'
   url 'https://launchpadlibrarian.net/121696657/gcc-arm-none-eabi-4_6-2012q4-20121016-src.tar.bz2'
-  sha1 '13a5b3ddf57b69a494471b5a3024ce3aebf3772e'
+  sha256 '13a5b3ddf57b69a494471b5a3024ce3aebf3772e'
 
   # suppress "The build-tool has reset ENV. --env=std required."
   # Must be after options and before depends_on
@@ -29,8 +29,8 @@ class GccArmNoneEabi46 < Formula
   #
   bottle do
     root_url 'http://pixhawk.org/_media/downloads'
-    sha1 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mountain_lion
-    sha1 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mavericks
+    sha256 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mountain_lion
+    sha256 '9933172127eb2bfe89b1efbe436e42698bbf4aa0' => :mavericks
   end
 
   def patches

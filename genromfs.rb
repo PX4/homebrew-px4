@@ -3,7 +3,7 @@ require 'formula'
 class Genromfs < Formula
   homepage ''
   url 'http://px4-travis.s3.amazonaws.com/toolchain/genromfs-0.5.2.tar.gz'
-  sha1 '27615b9de3a020084065b88b3ec74232ef268cf8'
+  sha256 '27615b9de3a020084065b88b3ec74232ef268cf8'
 
   def install
     system "make"
