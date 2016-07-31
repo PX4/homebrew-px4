@@ -4,7 +4,7 @@ class KconfigFrontends < Formula
   homepage ''
   url 'http://ymorin.is-a-geek.org/download/kconfig-frontends/kconfig-frontends-3.7.0.0.tar.xz'
   version '3.7.0.0'
-  sha256 'fdf54831f3d926c5f8f66441d549b672804dfeb8'
+  sha256 '81944063e7afd2dce45eef2476861f5a767f2a8468c7b95563ea70b2e7b1159b'
 
   depends_on 'xz' => :build
   depends_on 'automake' => :build
@@ -14,9 +14,9 @@ class KconfigFrontends < Formula
   bottle do
     #cellar :any
     root_url 'http://pixhawk.org/_media/downloads'
-    sha256 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :mavericks
-    sha256 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :yosemite
-    sha256 "091c9a00ed9d84d4cc1603d60b81ef120d51f173" => :el_capitan
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
   end
 
   def patches
