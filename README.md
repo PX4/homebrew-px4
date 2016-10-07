@@ -1,6 +1,4 @@
-homebrew-px4
+homebrew-arm-toolchain
 ============
 
-PX4-related Homebrew formula for developers using OS X
-
-Contact: lorenz@px4.io
+GNU ARM Embedded Toolchain Homebrew formula for developers using OS X
