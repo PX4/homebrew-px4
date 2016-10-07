@@ -1,6 +1,12 @@
-homebrew-px4
+homebrew-arm-toolchain
 ============
 
-PX4-related Homebrew formula for developers using OS X
+GNU ARM Embedded Toolchain Homebrew formula for developers using OS X
 
-Contact: lorenz@px4.io
+#### Installing the GNU ARM Embedded Toolchain with Homebrew
+
+```
+$ brew tap SomaticLabs/gnu-arm-toolchain
+$ brew install gcc-arm-none-eabi
+$ arm-none-eabi-gcc --version
+```
