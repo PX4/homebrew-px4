@@ -10,6 +10,7 @@ class KconfigFrontends < Formula
   depends_on 'automake' => :build
   depends_on 'autoconf' => :build
   depends_on 'libtool' => :build
+  depends_on 'pkgconfig' => :build
 
   bottle do
     #cellar :any
