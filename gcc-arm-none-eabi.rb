@@ -8,6 +8,7 @@ class GccArmNoneEabi < Formula
 
   def install
     ohai 'Copying binaries...'
-    system 'cp', '-rv', 'arm-none-eabi', 'bin', 'lib', 'share', "#{prefix}/"
+    system 'mkdir', '-p', "#{prefix}/"
+    system 'cp', '-r', 'arm-none-eabi', 'bin', 'lib', 'share', "#{prefix}/"
   end
 end
