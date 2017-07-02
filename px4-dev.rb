@@ -11,12 +11,9 @@ class Px4Dev < Formula
 	depends_on "ninja"
 	depends_on "ant"
 	depends_on :java
-	depends_on "pyserial" => :python
-	depends_on "empy" => :python
-	depends_on "jinja2" => :python
 
 	homepage 'http://px4.io'
-	version '1.6.0.2'
+	version '1.6.0.3'
 	url 'https://raw.githubusercontent.com/PX4/Firmware/master/Tools/px4'
 	sha256 '48199ee9ff392eff8a1efcd177e2c10f4a4dfd9877e52e13b1f3540d5dfedac9'
 
