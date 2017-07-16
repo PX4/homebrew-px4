@@ -13,7 +13,7 @@ class Px4Dev < Formula
 	depends_on :java
 
 	homepage 'http://px4.io'
-	version '1.6.0.3'
+	version '1.6.5.0'
 	url 'https://raw.githubusercontent.com/PX4/Firmware/master/Tools/px4.py'
 	sha256 '48199ee9ff392eff8a1efcd177e2c10f4a4dfd9877e52e13b1f3540d5dfedac9'
 
