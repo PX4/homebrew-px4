@@ -10,6 +10,7 @@ class Px4Dev < Formula
 	depends_on "cmake"
 	depends_on "ninja"
 	depends_on "ant"
+	depends_on "fastrtps"
 	depends_on :java
 
 	homepage 'http://px4.io'
