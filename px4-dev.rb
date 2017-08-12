@@ -11,6 +11,7 @@ class Px4Dev < Formula
 	depends_on "ninja"
 	depends_on "ant"
 	depends_on "fastrtps"
+	depends_on "fastcdr"
 	depends_on :java
 
 	homepage 'http://px4.io'
