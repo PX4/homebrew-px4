@@ -14,6 +14,7 @@ class Fastrtps < Formula
   bottle do
     root_url "http://px4-tools.s3.amazonaws.com"
     cellar :any
+    sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :el_capitan
     sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :sierra
     sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :high_sierra
   end
