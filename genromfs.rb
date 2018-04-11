@@ -9,11 +9,8 @@ class Genromfs < Formula
     system "make"
     system "make PREFIX=#{prefix} install-bin"
   end
-  
-  def patches
-    # fixes something small
-    DATA
-  end
+
+  patch :DATA
 
   def test
     # This test will fail and we won't accept that! It's enough to just replace
@@ -31,9 +28,8 @@ index d278efc..f0b9427 100644
 @@ -16,7 +16,7 @@ FILES = COPYING NEWS ChangeLog Makefile \
   readme-kernel-patch genrommkdev romfs.txt \
   checkdist
- 
+
 -prefix = /usr
 +prefix =
  bindir = $(prefix)/bin
  mandir = $(prefix)/man
- 
