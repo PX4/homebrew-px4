@@ -20,9 +20,7 @@ class KconfigFrontends < Formula
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
   end
 
-  def patches
-    DATA
-  end
+  patch :DATA
 
   def install
     system "./bootstrap"
@@ -42,11 +40,11 @@ diff -ru ../orig/kconfig-frontends-3.7.0.0/bootstrap ./bootstrap
 +++ ./bootstrap	2013-01-29 22:32:58.000000000 -0800
 @@ -2,7 +2,7 @@
  set -e
- 
+
  printf "Running libtoolize...\n"
 -libtoolize --copy --force
 +glibtoolize --copy --force
- 
+
  printf "Running aclocal...\n"
  aclocal -Wall --force
 diff -ru ../orig/kconfig-frontends-3.7.0.0/configure.ac ./configure.ac
@@ -59,13 +57,13 @@ diff -ru ../orig/kconfig-frontends-3.7.0.0/configure.ac ./configure.ac
 -                root_menu="$( echo "$enableval" |sed -r -e 's/\$/\\$$/g;' )"])])
 +                root_menu="$( echo "$enableval" |sed -E -e 's/\$/\\$$/g;' )"])])
  AC_SUBST([root_menu], [${root_menu=Configuration}])
- 
+
  AC_ARG_ENABLE(
 diff -ru ../orig/kconfig-frontends-3.7.0.0/scripts/ksync.sh ./scripts/ksync.sh
 --- ../orig/kconfig-frontends-3.7.0.0/scripts/ksync.sh	2012-05-29 15:38:07.000000000 -0700
 +++ ./scripts/ksync.sh	2013-01-29 22:37:17.000000000 -0800
 @@ -20,7 +20,7 @@
- 
+
  # Get the kernel version
  eval $( head -n 5 "${k_dir}/Makefile"                       \
 -        |sed -r -e 's/^/K_/; s/"//g; s/ = ?/="/; s/$/"/;'   \
@@ -84,11 +82,11 @@ diff -ru ../orig/kconfig-frontends-3.7.0.0/scripts/version.sh ./scripts/version.
 +++ ./scripts/version.sh	2013-01-29 22:36:35.000000000 -0800
 @@ -26,7 +26,7 @@
  fi
- 
+
  k_ver_plain="$( printf "%s" "${k_ver}"  \
 -                |sed -r -e 's/-rc.*//;' )"
 +                |sed -E -e 's/-rc.*//;' )"
- 
+
  case "${kf_ver}" in
      hg) kf_ver="hg_$( hg id -i -r . )"
 diff -ru ../orig/kconfig-frontends-3.7.0.0/utils/Makefile.am ./utils/Makefile.am
@@ -96,7 +94,7 @@ diff -ru ../orig/kconfig-frontends-3.7.0.0/utils/Makefile.am ./utils/Makefile.am
 +++ ./utils/Makefile.am	2013-01-29 22:41:34.000000000 -0800
 @@ -16,6 +16,6 @@
  EXTRA_DIST = tweak.in tweak.in.patch
- 
+
  tweak: tweak.in
 -	$(AM_V_GEN)$(SED) -r -e "s/@CONFIG_@/$(config_prefix)/g"    \
 +	$(AM_V_GEN)$(SED) -E -e "s/@CONFIG_@/$(config_prefix)/g"    \
@@ -120,9 +118,9 @@ diff -ru ../orig/kconfig-frontends-3.7.0.0/utils/tweak.in ./utils/tweak.in
 @@ -77,7 +77,7 @@
  undef_var() {
  	local name=$1
- 
+
 -	sed -ri "/^($name=|# $name is not set)/d" "$FN"
 +	sed -Ei "/^($name=|# $name is not set)/d" "$FN"
  }
- 
+
  if [ "$1" = "--file" ]; then
