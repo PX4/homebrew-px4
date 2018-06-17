@@ -1,6 +1,6 @@
 require 'formula'
 
-class GccArmNoneEabi63 < Formula
+class GccArmNoneEabi < Formula
   homepage 'https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads'
   version '20170628'
   url 'https://armkeil.blob.core.windows.net/developer/Files/downloads/gnu-rm/6-2017q2/gcc-arm-none-eabi-6-2017-q2-update-mac.tar.bz2'
