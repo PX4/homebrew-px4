@@ -4,7 +4,7 @@ class KconfigFrontends < Formula
   homepage ''
   url 'http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz'
   version '3.7.0.0'
-  sha256 '81944063e7afd2dce45eef2476861f5a767f2a8468c7b95563ea70b2e7b1159b'
+  sha256 'a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9'
 
   depends_on 'xz' => :build
   depends_on 'automake' => :build
