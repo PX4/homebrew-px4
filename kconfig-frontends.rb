@@ -14,7 +14,7 @@ class KconfigFrontends < Formula
 
   bottle do
     #cellar :any
-    root_url 'http://px4-travis.s3.amazonaws.com/toolchain/'
+    root_url 'http://px4-travis.s3.amazonaws.com/toolchain/bottles'
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
