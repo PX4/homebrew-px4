@@ -2,7 +2,7 @@ require 'formula'
 
 class KconfigFrontends < Formula
   homepage ''
-  url 'http://ymorin.is-a-geek.org/download/kconfig-frontends/kconfig-frontends-3.7.0.0.tar.xz'
+  url 'http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz'
   version '3.7.0.0'
   sha256 '81944063e7afd2dce45eef2476861f5a767f2a8468c7b95563ea70b2e7b1159b'
 
@@ -14,7 +14,7 @@ class KconfigFrontends < Formula
 
   bottle do
     #cellar :any
-    root_url 'http://pixhawk.org/_media/downloads'
+    root_url 'http://px4-travis.s3.amazonaws.com/toolchain/'
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
