@@ -18,6 +18,9 @@ class KconfigFrontends < Formula
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :sierra
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :high_sierra
+    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mojave
   end
 
   patch :DATA
