@@ -1,20 +1,14 @@
-require 'formula'
+require "formula"
 
 class KconfigFrontends < Formula
-  homepage ''
-  url 'http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz'
-  version '3.7.0.0'
-  sha256 'a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9'
-
-  depends_on 'xz' => :build
-  depends_on 'automake' => :build
-  depends_on 'autoconf' => :build
-  depends_on 'libtool' => :build
-  depends_on 'pkgconfig' => :build
+  desc "kconfig frontends and parser"
+  homepage "http://ymorin.is-a-geek.org/projects/kconfig-frontends"
+  url "http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz"
+  sha256 "a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9"
 
   bottle do
-    #cellar :any
-    root_url 'http://px4-travis.s3.amazonaws.com/toolchain/bottles'
+    # cellar :any
+    root_url "http://px4-travis.s3.amazonaws.com/toolchain/bottles"
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
@@ -23,17 +17,27 @@ class KconfigFrontends < Formula
     sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mojave
   end
 
+  depends_on "autoconf" => :build
+
+  depends_on "automake" => :build
+
+  depends_on "libtool" => :build
+
+  depends_on "pkg-config" => :build
+
+  depends_on "xz" => :build
+
   patch :DATA
 
   def install
     system "./bootstrap"
     system "./configure", "--disable-debug", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
-    system "make install" # if this fails, try separate make/make install steps
+    system "make install"
   end
 
-  def test
-    system "kconfig-conf"
+  test do
+    system "#{bin}/kconfig-conf"
   end
 end
 

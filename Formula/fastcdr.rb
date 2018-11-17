@@ -1,10 +1,10 @@
-require 'formula'
+require "formula"
 
 class Fastcdr < Formula
-  homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
-  version "1.6.0"
   desc "OMG RTPS / DDS implementation."
+  homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "https://github.com/eProsima/Fast-CDR/archive/v1.0.8.tar.gz"
+  version "1.6.0"
   sha256 "d47d924b76bc2fc7821dcadda4f8d1cb0f56df8353aa57cdf1106c49a612507f"
 
   depends_on "cmake" => :build
