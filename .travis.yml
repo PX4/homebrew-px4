@@ -5,10 +5,6 @@ matrix:
       os: osx
       osx_image: xcode10.1
       rvm: system
-    - name: Test on MacOS Sierra
-      os: osx
-      osx_image: xcode9.2
-      rvm: system
 
 cache:
   directories:
@@ -21,8 +17,6 @@ before_install:
     fi
   - echo $USER
   - sudo chown -R $USER $(brew --repo)
-  - sudo chown -R $USER $(brew --prefix)/*
-  - sudo chown -R $USER /usr/local/lib/python2.7/
   - git -C "$(brew --repo)" reset --hard origin/master
   - git -C "$(brew --repo)" clean -qxdff
   - export HOMEBREW_DEVELOPER="1"
