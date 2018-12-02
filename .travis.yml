@@ -37,6 +37,6 @@ script:
   - brew audit $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew install px4-sim
-  - if [[ "$OSX" == "10.12" ]; then
+  - if [[ "$OSX" == "10.12" ]]; then
       brew link --overwrite numpy;
     fi
