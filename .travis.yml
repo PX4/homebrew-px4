@@ -2,10 +2,12 @@ language: ruby
 matrix:
   include:
     - name: Test on MacOS High Sierra
+      env: OSX=10.13
       os: osx
       osx_image: xcode10.1
       rvm: system
     - name: Test on MacOS Sierra
+      env: OSX=10.12
       os: osx
       osx_image: xcode9.2
       rvm: system
@@ -35,3 +37,6 @@ script:
   - brew audit $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew install px4-sim
+  - if [[ "$OSX" == "10.12" ]; then
+      brew link --overwrite numpy;
+    fi
