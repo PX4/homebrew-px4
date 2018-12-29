@@ -7,6 +7,7 @@ class Px4Sim < Formula
   version "1.6.5.0"
   sha256 "48199ee9ff392eff8a1efcd177e2c10f4a4dfd9877e52e13b1f3540d5dfedac9"
   depends_on "exiftool"
+  depends_on "glog"
   depends_on "graphviz"
   depends_on "opencv"
   depends_on "osrf/simulation/gazebo8"
