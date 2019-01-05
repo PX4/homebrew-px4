@@ -1,10 +1,11 @@
+os: osx
+rvm: system
+
 language: ruby
 matrix:
   include:
     - env: OSX=10.13
-      os: osx
       osx_image: xcode10.1
-      rvm: system
 
 cache:
   directories:
@@ -13,7 +14,7 @@ cache:
 before_install:
   - export TRAVIS_COMMIT="$(git rev-parse --verify -q HEAD)"
   - if [ -f ".git/shallow" ]; then
-      travis_retry git fetch --unshallow;
+    travis_retry git fetch --unshallow;
     fi
   - sudo chown -R $USER "$(brew --repo)"
   - git -C "$(brew --repo)" reset --hard origin/master
@@ -28,6 +29,16 @@ before_install:
   - ulimit -n 1024
 
 script:
+  # Homebrew style checks
   - brew audit $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
+
+  # Install the toolchain
   - brew install px4-sim
+  - sudo -H pip install --upgrade --force-reinstall numpy
+  - sudo -H pip install pyserial empy toml pandas jinja2 pyyaml
+
+  # Compile PX4 firmware
+  - git clone -b stable https://github.com/PX4/Firmware.git ~/Firmware
+  - cd ~/Firmware
+  - DONT_RUN=1 make posix_sitl_default gazebo
