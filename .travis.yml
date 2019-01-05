@@ -39,6 +39,6 @@ script:
   - sudo -H pip install pyserial empy toml pandas jinja2 pyyaml
 
   # Compile PX4 firmware
-  - git clone -b stable https://github.com/PX4/Firmware.git ~/Firmware
+  - git clone -b master https://github.com/PX4/Firmware.git ~/Firmware
   - cd ~/Firmware
   - DONT_RUN=1 make posix_sitl_default gazebo
