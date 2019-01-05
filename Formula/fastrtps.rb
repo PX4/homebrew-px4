@@ -4,7 +4,6 @@ class Fastrtps < Formula
   desc "OMG RTPS / DDS implementation."
   homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "http://px4-tools.s3.amazonaws.com/fastrtps-v1.6.0.tar.gz"
-  #version "1.6.0"
   sha256 "a999f30e945c2be856cc4cbed3b338646c4016e6a26e0416dc442f07f658a2b5"
 
   bottle do
