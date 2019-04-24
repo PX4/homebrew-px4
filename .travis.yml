@@ -41,4 +41,4 @@ script:
   # Compile PX4 firmware
   - git clone -b master https://github.com/PX4/Firmware.git ~/Firmware
   - cd ~/Firmware
-  - DONT_RUN=1 make posix_sitl_default gazebo
+  - DONT_RUN=1 make px4_sitl_default gazebo
