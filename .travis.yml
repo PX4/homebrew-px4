@@ -8,6 +8,9 @@ matrix:
     - osx_image: xcode10.3
     - osx_image: xcode11.2
 
+before_cache:
+  - brew cleanup
+
 cache:
   directories:
     - $HOME/Library/Caches/Homebrew
