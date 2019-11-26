@@ -31,6 +31,7 @@ before_install:
   - export TRAVIS_BUILD_DIR="$(brew --repo $TRAVIS_REPO_SLUG)"
   - cd "$(brew --repo)"
   - ulimit -n 1024
+  - brew link openssl --force
 
 script:
   # Homebrew style checks
