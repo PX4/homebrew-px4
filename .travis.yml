@@ -42,7 +42,8 @@ script:
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
 
   # Install the toolchain
-  - brew install px4-sim
+  - brew unlink python@2
+  - brew install px4-sim python3
   - pip3 install --user --upgrade pyserial empy toml pandas jinja2 pyyaml
 
   # Compile PX4 firmware
