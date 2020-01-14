@@ -17,6 +17,7 @@ class Px4Dev < Formula
   depends_on :java
   depends_on "kconfig-frontends"
   depends_on "ninja"
+  depends_on "python3"
 
   def install
     mkdir_p "#{bin}/"
