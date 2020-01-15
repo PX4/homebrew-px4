@@ -46,7 +46,7 @@ script:
   - brew unlink python python@2
   - brew install python
   - brew install px4-sim
-  - pip3 install --user --upgrade pyserial empy toml pandas jinja2 pyyaml
+  - pip3 install --user --upgrade pyserial empy toml pandas jinja2 pyyaml pyros-genmsg
 
   # Compile PX4 firmware
   - git clone -b master https://github.com/PX4/Firmware.git ~/Firmware
