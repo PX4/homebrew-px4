@@ -12,6 +12,8 @@ class Px4Sim < Formula
   depends_on "gst-libav"
   depends_on "gst-plugins-base"
   depends_on "gst-plugins-good"
+  depends_on "gst-plugins-bad"
+  depends_on "gst-plugins-ugly"
   depends_on "gstreamer"
   depends_on "opencv"
   depends_on "osrf/simulation/gazebo9"
