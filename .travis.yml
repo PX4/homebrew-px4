@@ -41,10 +41,10 @@ script:
   - brew audit $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
 
-  # Install the toolchain
-  - brew unlink python@2
+  # Install the toolchain and Python dependencies
+  - brew uninstall python python@2
+  - brew unlink python python@2
   - brew install python
-  - brew link python
   - brew install px4-sim
   - pip3 install --user --upgrade pyserial empy toml pandas jinja2 pyyaml
 
