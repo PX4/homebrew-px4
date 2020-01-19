@@ -42,9 +42,7 @@ script:
   - brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb
 
   # Install the toolchain and Python dependencies
-  - brew uninstall python python@2
-  - brew unlink python python@2
-  - brew install python
+  - brew uninstall python@2
   - brew install px4-sim
   - pip3 install --user --upgrade pyserial empy toml pandas jinja2 pyyaml pyros-genmsg
 
