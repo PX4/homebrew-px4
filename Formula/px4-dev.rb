@@ -14,7 +14,6 @@ class Px4Dev < Formula
   depends_on "fastrtps"
   depends_on "gcc-arm-none-eabi"
   depends_on "genromfs"
-  depends_on :java
   depends_on "kconfig-frontends"
   depends_on "ninja"
   depends_on "python"
