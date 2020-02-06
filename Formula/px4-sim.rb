@@ -1,25 +1,17 @@
 require "formula"
 
+# This formula is presented for compatiliby with older instructions.
+# Going forward Gazebo and/or jMAVSim can also be installed individually using
+# px4-sim-gazebo and px4-sim-jmavsim.
+
 class Px4Sim < Formula
   desc "PX4 simulation toolchain"
   homepage "http://px4.io"
   url "https://raw.githubusercontent.com/PX4/Firmware/master/Tools/px4.py"
   version "1.6.5.0"
   sha256 "48199ee9ff392eff8a1efcd177e2c10f4a4dfd9877e52e13b1f3540d5dfedac9"
-  depends_on "exiftool"
-  depends_on "glog"
-  depends_on "graphviz"
-  depends_on "gst-libav"
-  depends_on "gst-plugins-bad"
-  depends_on "gst-plugins-base"
-  depends_on "gst-plugins-good"
-  depends_on "gst-plugins-ugly"
-  depends_on "gstreamer"
-  depends_on "opencv"
-  depends_on "osrf/simulation/gazebo9"
-  depends_on "protobuf"
-  depends_on "px4-dev"
-  depends_on :x11
+  depends_on "px4-sim-gazebo"
+  depends_on "px4-sim-jmavsim"
 
   def install
     mkdir_p "#{bin}/"
