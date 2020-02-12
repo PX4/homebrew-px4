@@ -14,7 +14,7 @@ class Px4SimJmavsim < Formula
 
   def install
     mkdir_p "#{bin}/"
-    cp "px4.py", "#{bin}/px4-sim.py"
+    cp "px4.py", "#{bin}/px4-sim-jmavsim.py"
     ohai "PX4 jMAVSim simulation installed"
   end
 end

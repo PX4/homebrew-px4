@@ -23,7 +23,7 @@ class Px4SimGazebo < Formula
 
   def install
     mkdir_p "#{bin}/"
-    cp "px4.py", "#{bin}/px4-sim.py"
+    cp "px4.py", "#{bin}/px4-sim-gazebo.py"
     ohai "PX4 Gazebo simulation installed"
   end
 end
