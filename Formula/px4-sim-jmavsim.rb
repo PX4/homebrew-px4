@@ -11,6 +11,7 @@ class Px4SimJmavsim < Formula
   version "1.6.5.0"
   sha256 "48199ee9ff392eff8a1efcd177e2c10f4a4dfd9877e52e13b1f3540d5dfedac9"
   depends_on "ant"
+  depends_on "px4-dev"
 
   def install
     mkdir_p "#{bin}/"
