@@ -1,21 +1,23 @@
 require "formula"
 
 class Fastcdr < Formula
-  desc "OMG RTPS / DDS implementation."
-  homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
-  url "https://github.com/eProsima/Fast-CDR/archive/v1.0.8.tar.gz"
-  version "1.6.0"
-  sha256 "d47d924b76bc2fc7821dcadda4f8d1cb0f56df8353aa57cdf1106c49a612507f"
+  desc "eProsima FastCDR library provides two serialization mechanisms. One is the standard CDR serialization mechanism, while the other is a faster implementation of it."
+  homepage "https://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
+  url "https://px4-tools.s3.amazonaws.com/Fast-CDR-1.0.10.tar.xz"
+  sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2"
+
+  bottle do
+    root_url "https://px4-tools.s3.amazonaws.com"
+    cellar :any
+    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :high_sierra
+    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :mojave
+    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :catalina
+  end
 
   depends_on "cmake" => :build
 
-  # bottle do
-  #   root_url "http://px4-tools.s3.amazonaws.com"
-  #   cellar :any
-  #   sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :sierra
-  # end
-
   def install
+    # Install FastCDR
     Dir.mkdir("./build")
     Dir.chdir("./build")
     system "cmake", "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}", ".."

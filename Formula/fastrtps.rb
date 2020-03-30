@@ -1,27 +1,29 @@
 require "formula"
 
 class Fastrtps < Formula
-  desc "OMG RTPS / DDS implementation."
-  homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
-  url "http://px4-tools.s3.amazonaws.com/fastrtps-v1.6.0.tar.gz"
-  sha256 "a999f30e945c2be856cc4cbed3b338646c4016e6a26e0416dc442f07f658a2b5"
+  desc "eProsima Fast RTPS is a high performance publish subscribe framework to share data in distributed systems using a decoupled model based on Publishers, Subscribers and Data Topics."
+  homepage "https://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
+  url "https://px4-tools.s3.amazonaws.com/Fast-RTPS-1.9.3.tar.xz"
+  sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b"
 
   bottle do
-    root_url "http://px4-tools.s3.amazonaws.com"
+    root_url "https://px4-tools.s3.amazonaws.com"
     cellar :any
-    sha256 "c3de7e9fde7eb59dbc30e398ea7332c083a664667eacfcb9898370c256384c4f" => :high_sierra
-    sha256 "c3de7e9fde7eb59dbc30e398ea7332c083a664667eacfcb9898370c256384c4f" => :mojave
+    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :high_sierra
+    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :mojave
+    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :catalina
   end
 
+  depends_on "foonathan-memory-vendor"
+  depends_on "asio"
+  depends_on "fastcdr"
+  depends_on "tinyxml2"
   depends_on "cmake" => :build
-  depends_on "gradle" => :build
-  depends_on :java
 
   def install
     Dir.mkdir("./build")
     Dir.chdir("./build")
-    system "cmake", "-DTHIRDPARTY=ON", "-DBUILD_JAVA=ON", "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}", ".."
-    system "make"
-    system "make", "install"
+    system "cmake", "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}", ".."
+    system "cmake", "--build", ".", "--target", "install"
   end
 end
