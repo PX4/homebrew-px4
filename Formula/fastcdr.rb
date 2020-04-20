@@ -1,7 +1,7 @@
 require "formula"
 
 class Fastcdr < Formula
-  desc "OMG RTPS / DDS implementation."
+  desc "OMG RTPS / DDS implementation"
   homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "https://github.com/eProsima/Fast-CDR/archive/v1.0.8.tar.gz"
   version "1.6.0"
