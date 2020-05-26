@@ -46,7 +46,8 @@ script:
   - brew install px4-sim
   - pip3 install --user --upgrade packaging pyserial empy toml pandas jinja2 pyyaml pyros-genmsg
 
-  # Compile PX4 firmware
+  # Compile PX4 Firmware (for SITL and a Nuttx target)
   - git clone -b master https://github.com/PX4/Firmware.git ~/Firmware
   - cd ~/Firmware
-  - DONT_RUN=1 make px4_sitl_default gazebo
+  - DONT_RUN=1 make px4_sitl_rtps gazebo
+  - DONT_RUN=1 make px4_fmu-v5_default
