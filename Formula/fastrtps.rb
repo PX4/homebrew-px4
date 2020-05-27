@@ -5,15 +5,6 @@ class Fastrtps < Formula
   homepage "https://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "https://px4-tools.s3.amazonaws.com/Fast-RTPS-1.9.3.tar.xz"
   sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b"
-
-  bottle do
-    root_url "https://px4-tools.s3.amazonaws.com"
-    cellar :any
-    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :high_sierra
-    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :mojave
-    sha256 "4583737a2086ff525ab750e0e8f838528cd3f8dfe50c834e429ce26b53d9fb0b" => :catalina
-  end
-
   depends_on "foonathan-memory-vendor"
   depends_on "asio"
   depends_on "fastcdr"

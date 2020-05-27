@@ -5,15 +5,6 @@ class Fastcdr < Formula
   homepage "https://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "https://px4-tools.s3.amazonaws.com/Fast-CDR-1.0.10.tar.xz"
   sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2"
-
-  bottle do
-    root_url "https://px4-tools.s3.amazonaws.com"
-    cellar :any
-    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :high_sierra
-    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :mojave
-    sha256 "914e019ba06dc0eca147d35d3bef3c660fed6b79aa86c22ec14a27ea098fffb2" => :catalina
-  end
-
   depends_on "cmake" => :build
 
   def install

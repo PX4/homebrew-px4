@@ -5,15 +5,6 @@ class FoonathanMemoryVendor < Formula
   homepage "https://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
   url "https://px4-tools.s3.amazonaws.com/foonathan_memory_vendor-0.3.0.tar.xz"
   sha256 "1dc0bbe3f012e09fde6e5d775646ffe88d3073bb1cce198fec36bfe8a62ef39c"
-
-  bottle do
-    root_url "https://px4-tools.s3.amazonaws.com"
-    cellar :any
-    sha256 "1dc0bbe3f012e09fde6e5d775646ffe88d3073bb1cce198fec36bfe8a62ef39c" => :high_sierra
-    sha256 "1dc0bbe3f012e09fde6e5d775646ffe88d3073bb1cce198fec36bfe8a62ef39c" => :mojave
-    sha256 "1dc0bbe3f012e09fde6e5d775646ffe88d3073bb1cce198fec36bfe8a62ef39c" => :catalina
-  end
-
   depends_on "cmake" => :build
 
   def install
