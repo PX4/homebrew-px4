@@ -11,7 +11,6 @@ branches:
   only:
     - master
 
-
 before_cache:
   - brew cleanup
 
@@ -47,6 +46,6 @@ script:
   - pip3 install --user --upgrade packaging pyserial empy toml pandas jinja2 pyyaml pyros-genmsg
 
   # Compile PX4 firmware
-  - git clone -b master https://github.com/PX4/Firmware.git ~/Firmware
+  - git clone --recursive https://github.com/PX4/Firmware.git ~/Firmware
   - cd ~/Firmware
-  - DONT_RUN=1 make px4_sitl_default gazebo
+  - DONT_RUN=1 make px4_sitl gazebo
