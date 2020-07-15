@@ -1,8 +1,9 @@
 require "formula"
 
-# This depends on AdoptOpenJdk 8 installed using:
+# This depends on Java 11 or 14 installed using e.g. AdoptOpenJDK
 # brew tap adoptopenjdk/openjdk
-# brew cask install adoptopenjdk8
+# brew cask install adoptopenjdk14
+# Alternatively, Java can be installed from Oracle.
 
 class Px4SimJmavsim < Formula
   desc "PX4 jMAVSim simulation"
