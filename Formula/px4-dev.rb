@@ -9,6 +9,7 @@ class Px4Dev < Formula
   depends_on "ant"
   depends_on "astyle"
   depends_on "bash-completion"
+  depends_on "ccache"
   depends_on "cmake"
   depends_on "fastcdr"
   depends_on "fastrtps"
