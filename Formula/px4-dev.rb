@@ -13,7 +13,7 @@ class Px4Dev < Formula
   depends_on "cmake"
   depends_on "fastcdr"
   depends_on "fastrtps"
-  depends_on "flock"
+  depends_on "discoteq/discoteq/flock"
   depends_on "gcc-arm-none-eabi"
   depends_on "genromfs"
   depends_on "kconfig-frontends"
