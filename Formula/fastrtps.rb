@@ -1,5 +1,3 @@
-require "formula"
-
 class Fastrtps < Formula
   desc "OMG RTPS / DDS implementation"
   homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"

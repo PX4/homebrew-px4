@@ -1,5 +1,3 @@
-require "formula"
-
 class KconfigFrontends < Formula
   desc "Kconfig frontends and parser"
   homepage "http://ymorin.is-a-geek.org/projects/kconfig-frontends"

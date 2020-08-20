@@ -1,5 +1,3 @@
-require "formula"
-
 class GccArmNoneEabi80 < Formula
   desc "GNU Embedded Toolchain for ARM"
   homepage "https://developer.arm.com/open-source/gnu-toolchain/gnu-rm/downloads"
