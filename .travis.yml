@@ -49,11 +49,9 @@ script:
       brew style $(brew --repo $TRAVIS_REPO_SLUG)/Formula/*.rb;
     else
       brew uninstall python@2;
-      # brew install px4-sim;
       brew install px4-dev;
       pip3 install --user --upgrade pyserial empy toml pandas jinja2 packaging pyyaml pyros-genmsg;
       git clone -b master https://github.com/PX4/Firmware.git ~/Firmware;
       cd ~/Firmware;
-      # DONT_RUN=1 make px4_sitl_default gazebo
       make px4_fmu-v5_default;
     fi
