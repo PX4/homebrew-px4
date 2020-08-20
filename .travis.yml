@@ -43,7 +43,8 @@ script:
 
   # Install the toolchain and Python dependencies
   - brew uninstall python@2
-  - brew install px4-sim
+  - brew install px4-dev
+  # - brew install px4-sim
   - pip3 install --user --upgrade packaging pyserial empy toml pandas jinja2 pyyaml pyros-genmsg
 
   # Compile PX4 firmware
