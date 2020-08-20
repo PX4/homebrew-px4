@@ -3,9 +3,12 @@ os: osx
 language: generic
 matrix:
   include:
-    - name: Test formulae in macOS 10.14 (Mojave)
+    - name: Test formulae in MacOS 10.14 (Mojave)
       os: osx
       osx_image: xcode11.3
+    - name: Test formulae in MacOS 10.15 (Catalina)
+      os: osx
+      osx_image: xcode12u
     - name: Sanity check the formulae
       os: osx
       osx_image: xcode11.3
