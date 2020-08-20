@@ -1,5 +1,3 @@
-require "formula"
-
 class GccArmNoneEabi48 < Formula
   desc "GNU Embedded Toolchain for ARM"
   homepage "https://launchpad.net/gcc-arm-embedded"

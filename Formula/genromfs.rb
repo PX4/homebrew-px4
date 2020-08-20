@@ -1,5 +1,3 @@
-require "formula"
-
 class Genromfs < Formula
   desc "Tool for creating ROMFS images"
   homepage "https://github.com/chexum/genromfs"
