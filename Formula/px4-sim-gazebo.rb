@@ -14,7 +14,7 @@ class Px4SimGazebo < Formula
   depends_on "gst-plugins-ugly"
   depends_on "gstreamer"
   depends_on "opencv"
-  depends_on "osrf/simulation/gazebo9"
+  depends_on "osrf/simulation/gazebo11"
   depends_on "protobuf"
   depends_on "px4-dev"
   depends_on :x11
