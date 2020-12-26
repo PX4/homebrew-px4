@@ -17,7 +17,6 @@ class Px4SimGazebo < Formula
   depends_on "osrf/simulation/gazebo11"
   depends_on "protobuf"
   depends_on "px4-dev"
-  depends_on :x11
 
   def install
     mkdir_p "#{bin}/"
