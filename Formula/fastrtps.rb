@@ -13,7 +13,7 @@ class Fastrtps < Formula
 
   depends_on "cmake" => :build
   depends_on "gradle" => :build
-  depends_on :java
+  depends_on "openjdk"
 
   def install
     Dir.mkdir("./build")

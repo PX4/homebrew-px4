@@ -16,7 +16,7 @@ class Fastrtps15 < Formula
 
   depends_on "cmake" => :build
   depends_on "gradle" => :build
-  depends_on :java
+  depends_on "openjdk"
 
   patch :p0, 'diff --git CMakeLists.txt CMakeLists.txt
 index ee7fc73b..eed6f0b4 100644
