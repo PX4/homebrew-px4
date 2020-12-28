@@ -1,3 +1,15 @@
+class XRequirement < Requirement
+  fatal true
+
+  satisfy(:build_env => false) { which("xquartz") }
+
+  def message; <<~EOS
+    XQuartz is required; install it via:
+      brew install --cask xquartz
+    EOS
+  end
+end
+
 class Px4SimGazebo < Formula
   desc "PX4 Gazebo simulation"
   homepage "http://px4.io"
@@ -17,7 +29,6 @@ class Px4SimGazebo < Formula
   depends_on "osrf/simulation/gazebo11"
   depends_on "protobuf"
   depends_on "px4-dev"
-  depends_on "xquartz"
 
   def install
     mkdir_p "#{bin}/"
