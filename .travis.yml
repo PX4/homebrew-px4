@@ -50,7 +50,7 @@ script:
     else
       brew uninstall python@2;
       brew install px4-dev;
-      pip3 install --user --upgrade pyserial empy toml numpy pandas jinja2 pyyaml pyros-genmsg packaging
+      pip3 install --user --upgrade pyserial empy toml numpy pandas jinja2 pyyaml pyros-genmsg packaging;
       git clone -b master https://github.com/PX4/Firmware.git ~/Firmware;
       cd ~/Firmware;
       make px4_fmu-v5_default;
