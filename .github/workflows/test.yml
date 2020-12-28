@@ -9,6 +9,8 @@ jobs:
     env:
       HOMEBREW_DEVELOPER: "1"
     steps:
+    - name: Tap PX4
+      run: brew tap PX4/px4
     - name: Install PX4 Dev
       run: brew install px4-dev
     - name: Install Python dependencies
