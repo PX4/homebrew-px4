@@ -1,5 +1,5 @@
 class KconfigFrontends < Formula
-  desc "Kconfig frontends and parser"
+  desc "Kernel configuration frontends and parser"
   homepage "http://ymorin.is-a-geek.org/projects/kconfig-frontends"
   url "http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz"
   sha256 "a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9"
