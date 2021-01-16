@@ -3,7 +3,7 @@ class XRequirement < Requirement
 
   satisfy(build_env: false) { which("xquartz") }
 
-  def message;
+  def message
     <<~EOS
     XQuartz is required; install it via:
       brew install --cask xquartz
