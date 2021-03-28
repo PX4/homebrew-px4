@@ -13,9 +13,9 @@ end
 class Px4SimGazebo < Formula
   desc "PX4 Gazebo simulation"
   homepage "http://px4.io"
-  url "https://raw.githubusercontent.com/PX4/Firmware/master/Tools/px4.py"
+  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/px4.py"
   version "1.11.0"
-  sha256 "dafe6a32d270c48cbd42960adb2155bd5f60d1aec8cb644b10f8cafc0c8d2e8f"
+  sha256 "6e4a8a6aad592a0c156d16233e16ee276fd6cc63b620be5bd047375b1352e27d"
   depends_on "exiftool"
   depends_on "glog"
   depends_on "graphviz"
