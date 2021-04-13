@@ -1,11 +1,12 @@
 class XRequirement < Requirement
   fatal true
 
-  satisfy(:build_env => false) { which("xquartz") }
+  satisfy(build_env: false) { which("xquartz") }
 
-  def message; <<~EOS
-    XQuartz is required; install it via:
-      brew install --cask xquartz
+  def message
+    <<~EOS
+      XQuartz is required; install it via:
+        brew install --cask xquartz
     EOS
   end
 end

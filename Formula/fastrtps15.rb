@@ -7,11 +7,10 @@ class Fastrtps15 < Formula
 
   bottle do
     root_url "http://px4-tools.s3.amazonaws.com"
-    cellar :any
-    sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :el_capitan
-    sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :sierra
-    sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :high_sierra
-    sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :mojave
+    sha256 cellar: :any, el_capitan:  "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a"
+    sha256 cellar: :any, sierra:      "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a"
+    sha256 cellar: :any, high_sierra: "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a"
+    sha256 cellar: :any, mojave:      "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a"
   end
 
   depends_on "cmake" => :build
