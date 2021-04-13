@@ -7,12 +7,12 @@ class KconfigFrontends < Formula
   bottle do
     # cellar :any
     root_url "http://px4-travis.s3.amazonaws.com/toolchain/bottles"
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mavericks
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :yosemite
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :el_capitan
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :sierra
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :high_sierra
-    sha256 "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08" => :mojave
+    sha256 mavericks:   "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    sha256 yosemite:    "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    sha256 el_capitan:  "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    sha256 sierra:      "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    sha256 high_sierra: "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    sha256 mojave:      "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
   end
 
   depends_on "autoconf" => :build
@@ -31,7 +31,7 @@ class KconfigFrontends < Formula
     system "./bootstrap"
     system "./configure", "--disable-debug", "--disable-dependency-tracking",
                           "--prefix=#{prefix}"
-    system "make install"
+    system "make", "install"
   end
 
   test do

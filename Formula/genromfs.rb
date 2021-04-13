@@ -8,7 +8,7 @@ class Genromfs < Formula
 
   def install
     system "make"
-    system "make PREFIX=#{prefix} install-bin"
+    system "make", "PREFIX=#{prefix}", "install-bin"
   end
 end
 
