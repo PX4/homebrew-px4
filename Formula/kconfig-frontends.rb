@@ -14,6 +14,8 @@ class KconfigFrontends < Formula
     sha256 high_sierra: "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
     sha256 mojave:      "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
   end
+  
+  depends_on "ncurses" if DevelopmentTools.clang_build_version >= 1000
 
   depends_on "autoconf" => :build
 
