@@ -29,8 +29,17 @@ class KconfigFrontends < Formula
 
   def install
     system "./bootstrap"
-    system "./configure", "--disable-debug", "--disable-dependency-tracking",
-                          "--prefix=#{prefix}"
+
+    args = %W[
+      --prefix=#{prefix}
+      --disable-debug
+      --disable-dependency-tracking
+    ]
+    if Hardware::CPU.arm?
+      args << "--disable-nconf"
+    end
+    
+    system "./configure", *args
     system "make", "install"
   end
 
