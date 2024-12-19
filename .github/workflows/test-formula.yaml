@@ -1,0 +1,39 @@
+name: Homebrew Tap CI
+
+on:
+  push:
+    branches:
+    - 'main'
+  pull_request:
+    branches:
+    - '*'
+
+jobs:
+  test-formula:
+    strategy:
+      matrix:
+        os: [macos-latest, macos-13]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Update and verify Homebrew
+        run: |
+          brew update
+          brew doctor
+          brew tap --repair
+
+      - name: Install dependencies
+        run: |
+          brew tap PX4/px4
+          brew install px4-dev
+
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --user pyserial empty toml numpy pandas jinja2 pyyaml pyros-genmsg packaging kconfiglib future jsonschema
+
+      - name: Run Homebrew test-bot
+        run: |
+          brew install brew-test-bot
+          brew test-bot --only-formulae Formula/*.rb
