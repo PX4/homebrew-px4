@@ -3,10 +3,10 @@ name: Homebrew Tap CI
 on:
   push:
     branches:
-    - 'main'
+      - 'main'
   pull_request:
     branches:
-    - '*'
+      - '*'
 
 jobs:
   test-formula:
@@ -25,13 +25,27 @@ jobs:
           brew doctor
           brew tap --repair
 
-      - name: Install dependencies
+      - name: Install Homebrew dependencies
         run: |
-          brew tap PX4/px4
+          brew tap PX4/px4 "${GITHUB_WORKSPACE}"
           brew install px4-dev
 
+      - name: Install Python dependencies
+        run: |
           python3 -m pip install --upgrade pip
-          python3 -m pip install --user pyserial empty toml numpy pandas jinja2 pyyaml pyros-genmsg packaging kconfiglib future jsonschema
+          python3 -m pip install --user \
+            pyserial \
+            empty \
+            toml \
+            numpy \
+            pandas \
+            jinja2 \
+            pyyaml \
+            pyros-genmsg \
+            packaging \
+            kconfiglib \
+            future \
+            jsonschema
 
       - name: Run Homebrew test-bot
         run: |
