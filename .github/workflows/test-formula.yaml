@@ -1,5 +1,6 @@
-name: Homebrew Tap CI
+#
 
+name: MacOS CI
 on:
   push:
     branches:
@@ -13,8 +14,8 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, macos-13]
+      fail-fast: false
     runs-on: ${{ matrix.os }}
-
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -29,6 +30,11 @@ jobs:
         run: |
           brew tap PX4/px4 "${GITHUB_WORKSPACE}"
           brew install px4-dev
+
+      - name: Install Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
 
       - name: Install Python dependencies
         run: |
@@ -51,3 +57,53 @@ jobs:
         run: |
           brew install brew-test-bot
           brew test-bot --only-formulae Formula/*.rb
+
+  build:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        config: [
+          px4_fmu-v5_default,
+          px4_sitl
+        ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Setup MacOS
+        run: ./Tools/setup/macos.sh; ./Tools/setup/macos.sh
+
+      - name: Prepare ccache timestamp
+        id: ccache_cache_timestamp
+        shell: cmake -P {0}
+        run: |
+          string(TIMESTAMP current_date "%Y-%m-%d-%H;%M;%S" UTC)
+          message("::set-output name=timestamp::${current_date}")
+
+      - name: ccache cache files
+        uses: actions/cache@v4
+        with:
+          path: ~/.ccache
+          key: macos_${{matrix.config}}-ccache-${{steps.ccache_cache_timestamp.outputs.timestamp}}
+          restore-keys: macos_${{matrix.config}}-ccache-
+
+      - name: setup ccache
+        run: |
+          mkdir -p ~/.ccache
+          echo "base_dir = ${GITHUB_WORKSPACE}" > ~/.ccache/ccache.conf
+          echo "compression = true" >> ~/.ccache/ccache.conf
+          echo "compression_level = 6" >> ~/.ccache/ccache.conf
+          echo "max_size = 40M" >> ~/.ccache/ccache.conf
+          echo "hash_dir = false" >> ~/.ccache/ccache.conf
+          ccache -s
+          ccache -z
+
+      - name: make ${{matrix.config}}
+        run: |
+          ccache -z
+          make ${{matrix.config}}
+          ccache -s
