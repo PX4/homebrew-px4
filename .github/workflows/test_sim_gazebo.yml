@@ -17,12 +17,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Update Homebrew
-        run: brew update
+        run: |
+          brew update
+          brew tap PX4/px4
 
       - name: Install the Formula
         run: |
-          brew tap PX4/px4
-          brew install --formula ./Formula/px4-sim-gazebo.rb
+          brew install --build-from-source ./Formula/px4-sim-gazebo.rb
 
       - name: Test the Formula
         run: brew test px4-sim-gazebo
