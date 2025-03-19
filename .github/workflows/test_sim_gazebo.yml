@@ -21,7 +21,7 @@ jobs:
 
       - name: Install the Formula
         run: |
-          brew install --build-from-source ./Formula/px4-sim-gazebo.rb
+          brew install --formula ./Formula/px4-sim-gazebo.rb
 
       - name: Test the Formula
         run: brew test px4-sim-gazebo
