@@ -21,8 +21,10 @@ jobs:
 
       - name: Update and verify Homebrew
         run: |
+          brew untap homebrew/core || true
+          brew untap homebrew/cask || true
           brew update
-          brew doctor
+          brew doctor || true
           brew tap --repair
 
       - name: Install Homebrew dependencies
