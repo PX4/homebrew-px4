@@ -1,6 +1,5 @@
-#
-
 name: MacOS CI
+
 on:
   push:
     branches:
@@ -58,24 +57,47 @@ jobs:
           brew install brew-test-bot
           brew test-bot --only-formulae Formula/*.rb
 
-  build:
+  test-px4-build:
     runs-on: macos-latest
+    needs: test-formula
     strategy:
       matrix:
-        config: [
-          px4_fmu-v5_default,
-          px4_sitl
-        ]
+        config: [px4_fmu-v5_default, px4_sitl]
     steps:
-      - uses: actions/checkout@v4
-
       - name: Install Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
 
-      - name: Setup MacOS
-        run: ./Tools/setup/macos.sh; ./Tools/setup/macos.sh
+      - name: Update and verify Homebrew
+        run: |
+          brew update
+          brew doctor
+
+      - name: Check out homebrew tap repository
+        uses: actions/checkout@v4
+
+      - name: Install Homebrew formula
+        run: |
+          brew tap PX4/px4 "${GITHUB_WORKSPACE}"
+          brew install px4-dev
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --user \
+            pyserial \
+            empty \
+            toml \
+            numpy \
+            pandas \
+            jinja2 \
+            pyyaml \
+            pyros-genmsg \
+            packaging \
+            kconfiglib \
+            future \
+            jsonschema
 
       - name: Prepare ccache timestamp
         id: ccache_cache_timestamp
@@ -102,8 +124,15 @@ jobs:
           ccache -s
           ccache -z
 
-      - name: make ${{matrix.config}}
+      - name: Clone PX4-Autopilot repository
+        uses: actions/checkout@v4
+        with:
+          repository: PX4/PX4-Autopilot
+          path: PX4-Autopilot
+
+      - name: Build PX4 ${{matrix.config}}
         run: |
+          cd PX4-Autopilot
           ccache -z
           make ${{matrix.config}}
           ccache -s
