@@ -10,12 +10,17 @@ class Fastdds < Formula
   depends_on "fastcdr"
   depends_on "foonathan-memory"
 
-
   def install
-    Dir.mkdir("./build")
-    Dir.chdir("./build")
-    system "cmake", "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}", ".."
+    mkdir "build"
+    cd "build"
+    system "cmake", "-DCMAKE_INSTALL_PREFIX=#{prefix}", ".."
     system "make"
     system "make", "install"
+  end
+
+  test do
+    # Add a basic test - perhaps check if a library file exists
+    # or run a simple command provided by the software
+    assert_predicate lib/"libfastrtps.dylib", :exist?
   end
 end
