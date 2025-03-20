@@ -54,10 +54,13 @@ jobs:
             future \
             jsonschema
 
-      - name: Run Homebrew test-bot
+      - name: Run Homebrew tests
         run: |
-          brew install brew-test-bot
-          brew test-bot --only-formulae Formula/*.rb
+          brew install --only-dependencies --include-test Formula/*.rb
+          brew install Formula/*.rb
+          brew audit --strict Formula/*.rb
+          brew style Formula/*.rb
+          brew test Formula/*.rb
 
   test-px4-build:
     runs-on: macos-latest
