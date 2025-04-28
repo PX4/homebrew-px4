@@ -1,4 +1,4 @@
-name: Test Sim Gazebo Formula
+name: Test PX4-Sim-Gazebo Homebrew Formula
 
 on:
   push:
@@ -6,27 +6,32 @@ on:
       - main
   pull_request:
     branches:
-      - '*'
+      - '**'
 
 jobs:
-  test-homebrew-formula:
+  test-formula:
     runs-on: macos-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Update Homebrew
+      - name: Setup local tap for formula testing
         run: |
           brew update
-          brew tap PX4/px4
+          brew tap-new px4/px4
+          mkdir -p $(brew --repo px4/px4)/Formula
+          cp Formula/px4-sim-gazebo.rb $(brew --repo px4/px4)/Formula/
 
-      - name: Install the Formula
+      - name: Install formula from local tap
         run: |
-          brew install --build-from-source ./Formula/px4-sim-gazebo.rb
+          brew install --build-from-source px4/px4/px4-sim-gazebo
 
-      - name: Test the Formula
-        run: brew test px4-sim-gazebo
+      - name: Test formula
+        run: |
+          brew test px4/px4/px4-sim-gazebo
 
-      - name: Audit the Formula
-        run: brew audit --strict --new-formula px4-sim-gazebo
+      - name: Audit formula
+        run: |
+          brew audit --strict --online px4/px4/px4-sim-gazebo
+
