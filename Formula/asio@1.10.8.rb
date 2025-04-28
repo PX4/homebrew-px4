@@ -11,6 +11,7 @@ class AsioAT1108 < Formula
   depends_on "automake" => :build
   depends_on "libtool" => :build
   depends_on "pkg-config" => :build
+  depends_on "boost"
 
   def install
     # Ensure C++11 compatibility
@@ -19,11 +20,16 @@ class AsioAT1108 < Formula
     # Regenerate the configure script
     system "autoconf"
 
-    # Configure and install
-    system "./configure",
-           "--disable-dependency-tracking",
-           "--disable-silent-rules",
-           "--prefix=#{prefix}"
+    # Configure with Boost support
+    args = %W[
+      --disable-dependency-tracking
+      --disable-silent-rules
+      --prefix=#{prefix}
+      --with-boost=#{Formula["boost"].opt_include}
+    ]
+    system "./configure", *args
+
+    # Build and install
     system "make", "install"
 
     # Install example programs
