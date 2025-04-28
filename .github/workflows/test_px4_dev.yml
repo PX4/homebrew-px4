@@ -40,20 +40,15 @@ jobs:
         with:
           repository: PX4/PX4-Autopilot
           path: px4-autopilot
+          fetch-depth: 0
 
-      - name: Initialize submodules
+      - name: Install PX4 Python dependencies
         working-directory: px4-autopilot
-        run: git submodule update --init --recursive
+        uses: py-actions/py-dependency-install@v1
+        with:
+          requirements-path: Tools/setup/requirements.txt
+          python-version: 3.11
 
-      - name: Setup Python virtualenv and install requirements
-        working-directory: px4-autopilot
-        run: |
-          python3 -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install -r Tools/setup/requirements.txt
-          echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> $GITHUB_PATH
-      
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
 
