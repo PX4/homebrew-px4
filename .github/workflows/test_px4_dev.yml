@@ -9,9 +9,15 @@ on:
       - '**'
 
 jobs:
-  build-px4-dev:
-    name: Building px4-dev
+  build:
+    name: Building ${{ matrix.formula }}
     runs-on: macos-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        formula:
+          - px4-dev
+          - px4-sim-gazebo
 
     steps:
       - name: Checkout repository
@@ -23,30 +29,14 @@ jobs:
       - name: Tap PX4/px4 repository
         run: brew tap px4/px4 "${{ github.workspace }}"
 
-      - name: Install and test px4-dev
-        run: |
-          brew install --build-from-source px4-dev
-          brew list --versions px4-dev
-          brew test px4-dev
-          brew audit --strict --online Formula/px4-dev.rb
+      - name: Install formula
+        run: brew install --build-from-source ${{ matrix.formula }}
 
-  build-px4-sim-gazebo:
-    name: Building px4-sim-gazebo
-    runs-on: macos-latest
+      - name: Verify installation
+        run: brew list --versions ${{ matrix.formula }}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Run formula tests
+        run: brew test ${{ matrix.formula }}
 
-      - name: Update Homebrew
-        run: brew update
-
-      - name: Tap PX4/px4 repository
-        run: brew tap px4/px4 "${{ github.workspace }}"
-
-      - name: Install and test px4-sim-gazebo
-        run: |
-          brew install --build-from-source px4-sim-gazebo
-          brew list --versions px4-sim-gazebo
-          brew test px4-sim-gazebo
-          brew audit --strict --online Formula/px4-sim-gazebo.rb
+      - name: Audit formula
+        run: brew audit --strict --online Formula/${{ matrix.formula }}.rb
