@@ -4,6 +4,7 @@ class Px4Dev < Formula
   url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/main/Tools/px4.py"
   version "1.15.0"
   sha256 "5eda2111dc20c092dc8241768121cf4173edabb593b2b199e6c233b5088c52aa"
+
   depends_on "ant"
   depends_on "astyle"
   depends_on "bash-completion"
@@ -18,8 +19,14 @@ class Px4Dev < Formula
   depends_on "python"
 
   def install
-    mkdir_p "#{bin}/"
-    cp "px4.py", "#{bin}/"
+    mkdir_p bin
+    cp "px4.py", bin
     ohai "PX4 Toolchain Installed"
+  end
+
+  test do
+    # Verify that px4.py prints the release information
+    output = shell_output("\#{bin}/px4.py --version")
+    assert_match(/PX4 Release/, output)
   end
 end
