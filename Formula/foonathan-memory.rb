@@ -12,9 +12,9 @@ class FoonathanMemory < Formula
     build_dir = buildpath/"build"
     build_dir.mkpath
 
-    # Configure with CMake policy minimum to satisfy compatibility
+    # Configure with tests disabled and CMake compatibility policy
     system "cmake", "-S", ".", "-B", build_dir,
-           "-DCMAKE_INSTALL_PREFIX=#{prefix}",
+           "-DFOONATHAN_MEMORY_BUILD_TESTS=OFF",
            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
            *std_cmake_args
 
