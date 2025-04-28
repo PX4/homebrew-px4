@@ -1,4 +1,4 @@
-name: Build and Test PX4-Dev Homebrew Formula
+name: Build and Test PX4 Homebrew Formulas
 
 on:
   push:
@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Building px4-dev
     runs-on: macos-latest
 
     steps:
@@ -19,14 +20,22 @@ jobs:
       - name: Update Homebrew
         run: brew update
 
-      - name: Build PX4-Dev formula
+      - name: Create local tap for all formulas
         run: |
-          brew install --build-from-source "${{ github.workspace }}/Formula/px4-dev.rb"
+          brew tap-new px4/local
+          mkdir -p "$(brew --repo px4/local)/Formula"
+          cp Formula/*.rb "$(brew --repo px4/local)/Formula/"
 
-      - name: Verify installation
+      - name: Build and test px4-dev formula
         run: |
+          brew install --build-from-source px4/local/px4-dev
           brew list --versions px4-dev
+          brew test px4-dev
+          brew audit --strict --online px4/local/px4-dev
 
-      - name: Audit PX4-Dev formula
+      - name: Build and test px4-sim-gazebo formula
         run: |
-          brew audit --strict --online "${{ github.workspace }}/Formula/px4-dev.rb"
+          brew install --build-from-source px4/local/px4-sim-gazebo
+          brew list --versions px4-sim-gazebo
+          brew test px4-sim-gazebo
+          brew audit --strict --online px4/local/px4-sim-gazebo
