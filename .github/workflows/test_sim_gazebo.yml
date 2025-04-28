@@ -16,30 +16,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup local tap for formula testing
+      - name: Install formula locally
         run: |
           brew update
-          brew tap-new px4/px4
-          mkdir -p "$(brew --repo px4/px4)/Formula"
-          cp Formula/px4-sim-gazebo.rb "$(brew --repo px4/px4)/Formula/"
-
-      - name: "Debug: list tapped formulae"
-        run: |
-          echo "Formulas in tap:"
-          ls -R "$(brew --repo px4/px4)/Formula"
-
-      - name: "Debug: tap info"
-        run: |
-          brew tap-info px4/px4
-
-      - name: Install formula from local tap
-        run: |
-          brew install --build-from-source px4/px4/px4-sim-gazebo
+          brew install --build-from-source ./Formula/px4-sim-gazebo.rb
 
       - name: Test formula
         run: |
-          brew test px4/px4/px4-sim-gazebo
+          brew test ./Formula/px4-sim-gazebo.rb
 
       - name: Audit formula
         run: |
-          brew audit --strict --online px4/px4/px4-sim-gazebo
+          brew audit --strict --online ./Formula/px4-sim-gazebo.rb
