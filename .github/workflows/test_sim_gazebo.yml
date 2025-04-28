@@ -16,10 +16,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install formula locally
+      - name: Install formula locally via absolute path
         run: |
           brew update
-          brew install --build-from-source "./Formula/px4-sim-gazebo.rb"
+          brew install --build-from-source "${GITHUB_WORKSPACE}/Formula/px4-sim-gazebo.rb"
 
       - name: Test formula
         run: |
@@ -27,4 +27,4 @@ jobs:
 
       - name: Audit formula
         run: |
-          brew audit --strict --online "./Formula/px4-sim-gazebo.rb"
+          brew audit --strict --online "${GITHUB_WORKSPACE}/Formula/px4-sim-gazebo.rb"
