@@ -1,0 +1,32 @@
+name: Build and Test PX4-Dev Homebrew Formula
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update Homebrew
+        run: brew update
+
+      - name: Build PX4-Dev formula
+        run: |
+          brew install --build-from-source "${{ github.workspace }}/Formula/px4-dev.rb"
+
+      - name: Verify installation
+        run: |
+          brew list --versions px4-dev
+
+      - name: Audit PX4-Dev formula
+        run: |
+          brew audit --strict --online "${{ github.workspace }}/Formula/px4-dev.rb"

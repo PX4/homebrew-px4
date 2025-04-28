@@ -1,8 +1,8 @@
 class Px4Dev < Formula
   desc "PX4 development toolchain"
   homepage "http://px4.io"
-  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/px4.py"
-  version "1.11.0"
+  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/main/Tools/px4.py"
+  version "1.15.0"
   sha256 "5eda2111dc20c092dc8241768121cf4173edabb593b2b199e6c233b5088c52aa"
   depends_on "ant"
   depends_on "astyle"
