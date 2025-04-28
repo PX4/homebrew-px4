@@ -6,37 +6,17 @@ class Fastdds < Formula
   license "Apache-2.0"
 
   depends_on "cmake" => :build
-  depends_on "asio"
+  depends_on "asio@1.10.8"
   depends_on "tinyxml2"
   depends_on "fastcdr"
   depends_on "foonathan-memory"
 
   def install
-    # Replace deprecated asio::io_service with asio::io_context using sed
-    system "find include/fastdds -type f \( -name '*.h' -or -name '*.hpp' -or -name '*.cpp' \) -exec sed -i '' -e 's/asio::io_service/asio::io_context/g' {} +"
-
-    # Out-of-tree build to avoid nested Dir.chdir conflicts
+    # Out-of-tree build to avoid nested chdir conflicts
     build_dir = buildpath/"build"
     build_dir.mkpath
 
-    # Configure with updated CMake policy
-    system "cmake", "-S", ".", "-B", build_dir,
-           "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
-           *std_cmake_args
-    system "cmake", "--build", build_dir
-    system "cmake", "--install", build_dir
-    # Silently replace deprecated asio::io_service with asio::io_context
-    Dir.glob("include/fastdds/**/*.{h,cpp,hpp}").each do |file|
-      inreplace file do |s|
-        s.gsub! "asio::io_service", "asio::io_context"
-      end
-    end
-
-    # Out-of-tree build to avoid nested Dir.chdir conflicts
-    build_dir = buildpath/"build"
-    build_dir.mkpath
-
-    # Configure, build, and install with CMake policy minimum
+    # Configure, build, and install with updated CMake policy
     system "cmake", "-S", ".", "-B", build_dir,
            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
            *std_cmake_args
