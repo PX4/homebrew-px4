@@ -43,11 +43,9 @@ jobs:
           fetch-depth: 0
 
       - name: Install PX4 Python dependencies
-        working-directory: px4-autopilot
-        uses: py-actions/py-dependency-install@v1
+        uses: py-actions/py-dependency-install@v4
         with:
-          requirements-path: Tools/setup/requirements.txt
-          python-version: 3.11
+          path: px4-autopilot/Tools/setup/requirements.txt
 
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
