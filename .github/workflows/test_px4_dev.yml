@@ -32,6 +32,11 @@ jobs:
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
 
+      - name: Install Python dependencies
+        if: ${{ matrix.formula == 'px4-dev' }}
+        run: |
+          python3 -m pip install pyserial
+
       - name: Verify installation
         run: brew list --versions ${{ matrix.formula }}
 
