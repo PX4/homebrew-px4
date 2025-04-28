@@ -7,20 +7,31 @@ class AsioAT1108 < Formula
   license "BSL-1.0"
   keg_only :versioned_formula
 
+  depends_on "autoconf" => :build
+  depends_on "automake" => :build
+  depends_on "libtool" => :build
+  depends_on "pkg-config" => :build
+
   def install
-    # Install metadata files like LICENSE and README
-    prefix.install_metafiles
+    # Ensure C++11 compatibility
+    ENV.cxx11
 
-    # Install headers
-    (include/"asio").install Dir["asio/include/asio/*.hpp"]
-    (include/"asio").install Dir["asio/include/asio/*/*.hpp"]
+    # Regenerate the configure script
+    system "autoconf"
 
-    # Install examples
-    pkgshare.install Dir["asio/examples"]
+    # Configure and install
+    system "./configure",
+           "--disable-dependency-tracking",
+           "--disable-silent-rules",
+           "--prefix=#{prefix}"
+    system "make", "install"
+
+    # Install example programs
+    pkgshare.install "src/examples"
   end
 
   test do
-    # Use the simple HTTP server example to test functionality
+    # Use the HTTP server example to verify functionality
     httpserver = pkgshare/"examples/cpp03/http/server/http_server"
     pid = fork do
       exec httpserver, "127.0.0.1", "8080", "."
