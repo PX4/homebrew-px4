@@ -19,12 +19,18 @@ class Px4Dev < Formula
   depends_on "python"
 
   def install
+    # Patch px4.py to use HTTPS for remote tag lookup instead of SSH
+    inreplace "px4.py",
+              "git@github.com:PX4/PX4-Autopilot.git",
+              "https://github.com/PX4/PX4-Autopilot.git"
+
+    # Install the px4 script
     bin.install "px4.py"
     ohai "PX4 Toolchain Installed"
   end
 
   test do
-    # Verify that invoking without args prints release info
+    # Ensure the script runs without SSH errors and prints release info
     output = shell_output("#{bin}/px4.py")
     assert_match(/PX4 Release/, output)
   end
