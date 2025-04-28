@@ -42,10 +42,21 @@ jobs:
           path: px4-autopilot
           fetch-depth: 0
 
-      - name: Install PX4 Python dependencies
-        uses: py-actions/py-dependency-install@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          path: px4-autopilot/Tools/setup/requirements.txt
+          python-version: '3.11'
+
+      - name: Setup Python virtual environment
+        working-directory: px4-autopilot
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Tools/setup/requirements.txt
+
+      - name: Add venv to PATH for subsequent steps
+        run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> $GITHUB_PATH
 
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
@@ -58,4 +69,6 @@ jobs:
 
       - name: Build PX4 Autopilot
         working-directory: px4-autopilot
-        run: make ${{ matrix.build_target }}
+        run: |
+          source venv/bin/activate
+          make ${{ matrix.build_target }}
