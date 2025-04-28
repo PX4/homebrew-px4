@@ -10,8 +10,10 @@ class Fastcdr < Formula
     build_dir = buildpath/"build"
     build_dir.mkpath
 
-    # Configure, build, and install using out-of-tree build directory
-    system "cmake", "-S", ".", "-B", build_dir, *std_cmake_args
+    # Configure with updated minimum CMake policy to avoid compatibility errors
+    system "cmake", "-S", ".", "-B", build_dir,
+           "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
+           *std_cmake_args
     system "cmake", "--build", build_dir
     system "cmake", "--install", build_dir
   end
