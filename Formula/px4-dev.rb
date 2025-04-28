@@ -19,14 +19,13 @@ class Px4Dev < Formula
   depends_on "python"
 
   def install
-    mkdir_p bin
-    cp "px4.py", bin
+    bin.install "px4.py"
     ohai "PX4 Toolchain Installed"
   end
 
   test do
-    # Verify that px4.py prints the release information
-    output = shell_output("\#{bin}/px4.py --version")
+    # Verify that invoking without args prints release info
+    output = shell_output("#{bin}/px4.py")
     assert_match(/PX4 Release/, output)
   end
 end
