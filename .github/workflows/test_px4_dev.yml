@@ -56,7 +56,7 @@ jobs:
         run: brew test ${{ matrix.formula }}
 
       - name: Audit formula
-        run: brew audit --strict --online "homebrew-px4/Formula/${{ matrix.formula }}.rb"
+        run: brew audit --strict --online ${{ matrix.formula }}
 
       - name: Build PX4 Autopilot
         working-directory: px4-autopilot
