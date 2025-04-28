@@ -11,28 +11,20 @@ class Fastdds < Formula
   depends_on "fastcdr"
   depends_on "foonathan-memory"
 
-  # Patch to use io_context instead of deprecated io_service
-  patch :DATA
-
   def install
-    # Use out-of-tree build to avoid nested Dir.chdir conflicts
+    # Replace deprecated asio::io_service with asio::io_context
+    inreplace "src/cpp/rtps/flowcontrol/FlowController.h",
+              "asio::io_service", "asio::io_context"
+
+    # Out-of-tree build to avoid conflicts
     build_dir = buildpath/"build"
     build_dir.mkpath
 
+    # Configure, build, and install with updated CMake policy
     system "cmake", "-S", ".", "-B", build_dir,
-           "-DCMAKE_INSTALL_PREFIX=#{prefix}",
            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
            *std_cmake_args
     system "cmake", "--build", build_dir
     system "cmake", "--install", build_dir
   end
 end
-
-__END__
-diff --git a/src/cpp/rtps/flowcontrol/FlowController.h b/src/cpp/rtps/flowcontrol/FlowController.h
-index abcdef0..1234567 100644
---- a/src/cpp/rtps/flowcontrol/FlowController.h
-+++ b/src/cpp/rtps/flowcontrol/FlowController.h
-@@ -73,7 +73,7 @@ class FastDDSFlowController
--  static std::unique_ptr<asio::io_service> ControllerService;
-+  static std::unique_ptr<asio::io_context> ControllerService;
