@@ -6,17 +6,13 @@ class Fastcdr < Formula
 
   depends_on "cmake" => :build
 
-  # bottle do
-  #   root_url "http://px4-tools.s3.amazonaws.com"
-  #   cellar :any
-  #   sha256 "e33d048df94b0e4efcdc5249a979f6c3780607d96ef1a1f767c54ab425a4418a" => :sierra
-  # end
-
   def install
-    Dir.mkdir("./build")
-    Dir.chdir("./build")
-    system "cmake", "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}", ".."
-    system "make"
-    system "make", "install"
+    build_dir = buildpath/"build"
+    build_dir.mkpath
+
+    # Configure, build, and install using out-of-tree build directory
+    system "cmake", "-S", ".", "-B", build_dir, *std_cmake_args
+    system "cmake", "--build", build_dir
+    system "cmake", "--install", build_dir
   end
 end
