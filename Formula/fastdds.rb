@@ -12,18 +12,21 @@ class Fastdds < Formula
   depends_on "foonathan-memory"
 
   def install
-    # Replace deprecated asio::io_service with asio::io_context
-    inreplace "src/cpp/rtps/flowcontrol/FlowController.h",
-              "asio::io_service", "asio::io_context"
+    # Replace deprecated asio::io_service with asio::io_context throughout sources
+    Dir.glob("include/fastdds/**/*.{h,cpp,hpp}").each do |file|
+      inreplace file, "asio::io_service", "asio::io_context"
+    end
 
-    # Out-of-tree build to avoid conflicts
+    # Out-of-tree build to avoid nested chdir conflicts
     build_dir = buildpath/"build"
     build_dir.mkpath
 
-    # Configure, build, and install with updated CMake policy
+    # Configure with updated CMake policy
     system "cmake", "-S", ".", "-B", build_dir,
            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
            *std_cmake_args
+
+    # Build and install
     system "cmake", "--build", build_dir
     system "cmake", "--install", build_dir
   end
