@@ -1,4 +1,4 @@
-name: Build and Test PX4 Homebrew Formulas
+name: Build, Test & Compile PX4 Projects
 
 on:
   push:
@@ -15,33 +15,54 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        formula:
-          - px4-dev
-          - px4-sim-gazebo
+        include:
+          - formula: px4-dev
+            build_target: px4_fmu-v5
+          - formula: px4-sim-gazebo
+            build_target: px4_sitl_default
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Homebrew tap
         uses: actions/checkout@v4
+        with:
+          repository: px4/homebrew-px4
+          path: homebrew-px4
 
       - name: Update Homebrew
         run: brew update
 
       - name: Tap PX4/px4 repository
-        run: brew tap px4/px4 "${{ github.workspace }}"
+        working-directory: homebrew-px4
+        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
 
+      - name: Checkout PX4 Autopilot
+        uses: actions/checkout@v4
+        with:
+          repository: PX4/PX4-Autopilot
+          path: px4-autopilot
+
+      - name: Initialize submodules
+        working-directory: px4-autopilot
+        run: git submodule update --init --recursive
+
+      - name: Setup Python virtualenv and install requirements
+        working-directory: px4-autopilot
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Tools/setup/requirements.txt
+          echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> $GITHUB_PATH
+      
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
-
-      - name: Install Python dependencies
-        if: ${{ matrix.formula == 'px4-dev' }}
-        run: |
-          python3 -m pip install pyserial
-
-      - name: Verify installation
-        run: brew list --versions ${{ matrix.formula }}
 
       - name: Run formula tests
         run: brew test ${{ matrix.formula }}
 
       - name: Audit formula
-        run: brew audit --strict --online Formula/${{ matrix.formula }}.rb
+        run: brew audit --strict --online "homebrew-px4/Formula/${{ matrix.formula }}.rb"
+
+      - name: Build PX4 Autopilot
+        working-directory: px4-autopilot
+        run: make ${{ matrix.build_target }}
