@@ -10,6 +10,7 @@ on:
 
 jobs:
   test-bot:
+    name: Check Style, and Audit Formula
     runs-on: ubuntu-24.04
     env:
       HOMEBREW_FORCE_VENDOR_RUBY: 1
