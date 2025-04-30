@@ -26,7 +26,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: px4/homebrew-px4
-          path: "${{ github.workspace }}"
+          path: homebrew-px4
 
       - name: Set up Homebrew
         id: set-up-homebrew
@@ -42,7 +42,7 @@ jobs:
 
       - name: Tap PX4/px4 repository
         working-directory: homebrew-px4
-        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
+        run: brew tap px4/px4 $(pwd)
 
       - name: Checkout PX4 Autopilot
         uses: actions/checkout@v4
