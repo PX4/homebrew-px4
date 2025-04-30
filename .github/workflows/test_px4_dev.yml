@@ -28,8 +28,17 @@ jobs:
           repository: px4/homebrew-px4
           path: homebrew-px4
 
-      - name: Update Homebrew
-        run: brew update
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Cache Bundler RubyGems
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ runner.os }}-rubygems-
 
       - name: Tap PX4/px4 repository
         working-directory: homebrew-px4
@@ -43,7 +52,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
@@ -56,7 +65,7 @@ jobs:
           pip install -r Tools/setup/requirements.txt
 
       - name: Add venv to PATH for subsequent steps
-        run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> $GITHUB_PATH
+        run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> "$GITHUB_PATH"
 
       - name: Install formula
         run: brew install --build-from-source ${{ matrix.formula }}
