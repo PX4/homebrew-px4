@@ -3,7 +3,7 @@ name: Build, Test & Compile PX4 Projects
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
       - '**'
