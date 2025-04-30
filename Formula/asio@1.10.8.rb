@@ -3,8 +3,8 @@ class AsioAT1108 < Formula
   homepage "https://think-async.com/Asio"
   url "https://downloads.sourceforge.net/project/asio/asio/1.10.8%20%28Stable%29/asio-1.10.8.tar.bz2"
   sha256 "26deedaebbed062141786db8cfce54e77f06588374d08cccf11c02de1da1ed49"
-  head "https://github.com/chriskohlhoff/asio.git"
   license "BSL-1.0"
+  head "https://github.com/chriskohlhoff/asio.git"
   keg_only :versioned_formula
 
   depends_on "autoconf" => :build

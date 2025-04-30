@@ -35,10 +35,8 @@ class KconfigFrontends < Formula
       --disable-debug
       --disable-dependency-tracking
     ]
-    if Hardware::CPU.arm?
-      args << "--disable-nconf"
-    end
-    
+    args << "--disable-nconf" if Hardware::CPU.arm?
+
     system "./configure", *args
     system "make", "install"
   end

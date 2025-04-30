@@ -7,9 +7,9 @@ class Fastdds < Formula
 
   depends_on "cmake" => :build
   depends_on "asio@1.10.8"
-  depends_on "tinyxml2"
   depends_on "fastcdr"
   depends_on "foonathan-memory"
+  depends_on "tinyxml2"
 
   def install
     # Out-of-tree build to avoid nested chdir conflicts

@@ -1,7 +1,7 @@
 class Fastcdr < Formula
   desc "OMG RTPS / DDS implementation"
   homepage "http://www.eprosima.com/index.php/products-all/eprosima-fast-rtps"
-  url "https://github.com/eProsima/Fast-CDR/archive/v1.0.22.tar.gz"
+  url "https://github.com/eProsima/Fast-CDR/archive/refs/tags/v1.0.22.tar.gz"
   sha256 "7ca7f09c633963622431bdb216eeb4145e378f81a2ce5113e341b9eee55e4f44"
 
   depends_on "cmake" => :build
