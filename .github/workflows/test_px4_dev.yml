@@ -28,21 +28,12 @@ jobs:
           repository: px4/homebrew-px4
           path: homebrew-px4
 
-      - name: Set up Homebrew
-        id: set-up-homebrew
-        uses: Homebrew/actions/setup-homebrew@master
-
-      - name: Cache Bundler RubyGems
-        id: cache
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
-          key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
-          restore-keys: ${{ runner.os }}-rubygems-
+      - name: Update Homebrew
+        run: brew update
 
       - name: Tap PX4/px4 repository
         working-directory: homebrew-px4
-        run: brew tap px4/px4 $(pwd)
+        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
 
       - name: Checkout PX4 Autopilot
         uses: actions/checkout@v4
