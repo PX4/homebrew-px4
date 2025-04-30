@@ -1,4 +1,4 @@
-name: brew test-bot
+name: Brew test-bot
 
 on:
   push:
