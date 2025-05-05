@@ -1,9 +1,10 @@
 class Px4Dev < Formula
   desc "PX4 development toolchain"
-  homepage "http://px4.io"
-  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/px4.py"
-  version "1.11.0"
+  homepage "https://px4.io"
+  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/main/Tools/px4.py"
+  version "1.15.0"
   sha256 "5eda2111dc20c092dc8241768121cf4173edabb593b2b199e6c233b5088c52aa"
+
   depends_on "ant"
   depends_on "astyle"
   depends_on "bash-completion"
@@ -18,8 +19,19 @@ class Px4Dev < Formula
   depends_on "python"
 
   def install
-    mkdir_p "#{bin}/"
-    cp "px4.py", "#{bin}/"
+    # Patch px4.py to use HTTPS for remote tag lookup instead of SSH
+    inreplace "px4.py",
+              "git@github.com:PX4/PX4-Autopilot.git",
+              "https://github.com/PX4/PX4-Autopilot.git"
+
+    # Install the px4 script
+    bin.install "px4.py"
     ohai "PX4 Toolchain Installed"
+  end
+
+  test do
+    # Ensure the script runs without SSH errors and prints release info
+    output = shell_output("#{bin}/px4.py")
+    assert_match(/PX4 Release/, output)
   end
 end

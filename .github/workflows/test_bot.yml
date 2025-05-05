@@ -1,0 +1,38 @@
+name: Brew test-bot
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  test-bot:
+    name: Check Style, and Audit Formula
+    runs-on: ubuntu-24.04
+    env:
+      HOMEBREW_FORCE_VENDOR_RUBY: 1
+    steps:
+      - name: Activate Homebrew
+        if: runner.os == 'Linux'
+        run: echo "/home/linuxbrew/.linuxbrew/bin" >> "$GITHUB_PATH"
+
+      - name: Set up Homebrew
+        id: set-up-homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+
+      - name: Cache Bundler RubyGems
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.set-up-homebrew.outputs.gems-path }}
+          key: ${{ runner.os }}-rubygems-${{ steps.set-up-homebrew.outputs.gems-hash }}
+          restore-keys: ${{ runner.os }}-rubygems-
+
+      - run: brew test-bot --only-cleanup-before
+
+      - run: brew test-bot --only-setup
+
+      - run: brew test-bot --fail-fast --tap=px4/px4 --only-tap-syntax

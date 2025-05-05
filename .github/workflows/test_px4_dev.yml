@@ -1,0 +1,74 @@
+name: Build, Test & Compile PX4 Projects
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+jobs:
+  build:
+    name: Building ${{ matrix.formula }}
+    runs-on: macos-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - formula: px4-dev
+            build_target: px4_fmu-v5
+          #- formula: px4-sim-gazebo
+            #build_target: px4_sitl_default
+
+    steps:
+      - name: Checkout Homebrew tap
+        uses: actions/checkout@v4
+        with:
+          repository: px4/homebrew-px4
+          path: homebrew-px4
+
+      - name: Update Homebrew
+        run: brew update
+
+      - name: Tap PX4/px4 repository
+        working-directory: homebrew-px4
+        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
+
+      - name: Checkout PX4 Autopilot
+        uses: actions/checkout@v4
+        with:
+          repository: PX4/PX4-Autopilot
+          path: px4-autopilot
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Setup Python virtual environment
+        working-directory: px4-autopilot
+        run: |
+          python3 -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r Tools/setup/requirements.txt
+
+      - name: Add venv to PATH for subsequent steps
+        run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> "$GITHUB_PATH"
+
+      - name: Install formula
+        run: brew install --build-from-source ${{ matrix.formula }}
+
+      - name: Run formula tests
+        run: brew test ${{ matrix.formula }}
+
+      - name: Audit formula
+        run: brew audit --strict --online ${{ matrix.formula }}
+
+      - name: Build PX4 Autopilot
+        working-directory: px4-autopilot
+        run: |
+          source venv/bin/activate
+          make ${{ matrix.build_target }}
