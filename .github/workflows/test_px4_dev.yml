@@ -18,8 +18,8 @@ jobs:
         include:
           - formula: px4-dev
             build_target: px4_fmu-v5
-          #- formula: px4-sim-gazebo
-            #build_target: px4_sitl_default
+          - formula: px4-sim-gazebo
+            build_target: px4_sitl_default
 
     steps:
       - name: Checkout Homebrew tap
