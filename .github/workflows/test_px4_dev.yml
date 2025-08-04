@@ -59,7 +59,9 @@ jobs:
         run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> "$GITHUB_PATH"
 
       - name: Install formula
-        run: brew install --build-from-source ${{ matrix.formula }}
+        run: |
+          brew install --build-from-source ${{ matrix.formula }}
+          brew link --overwrite --force arm-gcc-bin@13
 
       - name: Run formula tests
         run: brew test ${{ matrix.formula }}
