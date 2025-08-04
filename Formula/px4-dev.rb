@@ -12,11 +12,13 @@ class Px4Dev < Formula
   depends_on "cmake"
   depends_on "discoteq/discoteq/flock"
   depends_on "fastdds"
-  depends_on "gcc-arm-none-eabi"
   depends_on "genromfs"
   depends_on "kconfig-frontends"
+  depends_on "ncurses"
   depends_on "ninja"
+  depends_on "osx-cross/arm/arm-gcc-bin@13"
   depends_on "python"
+  depends_on "python-tk"
 
   def install
     # Patch px4.py to use HTTPS for remote tag lookup instead of SSH
@@ -27,6 +29,22 @@ class Px4Dev < Formula
     # Install the px4 script
     bin.install "px4.py"
     ohai "PX4 Toolchain Installed"
+  end
+
+  def caveats
+    <<~EOS
+      The PX4 development toolchain has been installed, including the ARM cross-compiler
+      from the osx-cross/arm tap (arm-gcc-bin@13).
+
+      Homebrew does not link versioned formulae by default, so you must link the compiler manually
+
+          brew link --overwrite --force arm-gcc-bin@13
+
+      If you have other versions of arm-none-eabi-gcc installed, this may override them.
+      You can unlink it manually with:
+
+          brew unlink arm-gcc-bin@13
+    EOS
   end
 
   test do
