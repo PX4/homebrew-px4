@@ -7,13 +7,29 @@ class Fastcdr < Formula
   depends_on "cmake" => :build
 
   def install
+    ENV.cxx11
+
+    sdk = Utils.popen_read("xcrun --sdk macosx --show-sdk-path").chomp
+    libcxx = "#{sdk}/usr/include/c++/v1"
+
     build_dir = buildpath/"build"
     build_dir.mkpath
 
-    # Configure with updated minimum CMake policy to avoid compatibility errors
-    system "cmake", "-S", ".", "-B", build_dir,
-           "-DCMAKE_POLICY_VERSION_MINIMUM=3.5",
-           *std_cmake_args
+    std_args = std_cmake_args + %W[
+      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+      -DCMAKE_OSX_ARCHITECTURES=x86_64
+      -DCMAKE_OSX_SYSROOT=#{sdk}
+      -DCMAKE_CXX_STANDARD=14
+      -DCMAKE_CXX_EXTENSIONS=OFF
+    ]
+
+    # Make absolutely sure the compiler sees the SDK + libc++ headers
+    ENV["SDKROOT"] = sdk
+    ENV.append "CPPFLAGS", "-isysroot #{sdk} -I#{libcxx}"
+    ENV.append "CXXFLAGS", "-isysroot #{sdk} -I#{libcxx} -stdlib=libc++"
+    ENV.append "LDFLAGS",  "-isysroot #{sdk} -stdlib=libc++"
+
+    system "cmake", "-S", ".", "-B", build_dir, *std_args
     system "cmake", "--build", build_dir
     system "cmake", "--install", build_dir
   end

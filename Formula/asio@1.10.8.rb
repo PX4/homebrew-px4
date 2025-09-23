@@ -14,27 +14,41 @@ class AsioAT1108 < Formula
   depends_on "boost@1.85"
 
   def install
-    # Ensure C++11 compatibility
     ENV.cxx11
+
+    boost = Formula["boost@1.85"]
+
+    # Discover the macOS SDK path (needed for standard C++ headers on modern macOS)
+    sdk = Utils.popen_read("xcrun --sdk macosx --show-sdk-path").chomp
+    libcxx = "#{sdk}/usr/include/c++/v1"
 
     # Regenerate the configure script
     system "autoconf"
 
-    # Configure with Boost support
+    # Configure with explicit Boost prefix; pass flags *inline* so configure can't ignore them
     args = %W[
       --disable-dependency-tracking
       --disable-silent-rules
       --prefix=#{prefix}
-      --with-boost=#{Formula["boost"].opt_include}
+      --with-boost=#{boost.opt_prefix}
     ]
-    system "./configure", *args
 
-    # Build and install
+    cppflags = "-I#{boost.opt_include} -I#{libcxx} -isysroot #{sdk}"
+    cxxflags = "-std=c++11 -I#{boost.opt_include} -I#{libcxx} -isysroot #{sdk}"
+    ldflags  = "-L#{boost.opt_lib} -isysroot #{sdk}"
+
+    system "./configure",
+          *args,
+          "CPPFLAGS=#{cppflags}",
+          "CXXFLAGS=#{cxxflags}",
+          "LDFLAGS=#{ldflags}",
+          # Preseed the old Autoconf header check we hit earlier:
+          "ac_cv_header_boost_noncopyable_hpp=yes"
+
     system "make", "install"
-
-    # Install example programs
     pkgshare.install "src/examples"
   end
+
 
   test do
     # Use the HTTP server example to verify functionality
