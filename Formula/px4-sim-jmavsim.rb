@@ -8,7 +8,7 @@ class Px4SimJmavsim < Formula
   homepage "http://px4.io"
   url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/px4.py"
   version "1.11.0"
-  sha256 "6e4a8a6aad592a0c156d16233e16ee276fd6cc63b620be5bd047375b1352e27d"
+  sha256 "7fc8a739658212cea302f446ef31c60babb5928ce98c9d990617f039e0da9ada"
   depends_on "ant"
   depends_on "px4-dev"
 
