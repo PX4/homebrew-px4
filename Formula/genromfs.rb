@@ -1,7 +1,7 @@
 class Genromfs < Formula
   desc "Tool for creating ROMFS images"
   homepage "https://github.com/chexum/genromfs"
-  url "http://px4-travis.s3.amazonaws.com/toolchain/genromfs-0.5.2.tar.gz"
+  url "https://artifacts.px4.io/toolchain/genromfs-0.5.2.tar.gz"
   sha256 "30f37fc734572c1dbaa2504585bc23ba6b8fd7df767ae7155995b2ca0ebed960"
 
   patch :DATA
