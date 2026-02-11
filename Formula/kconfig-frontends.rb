@@ -1,12 +1,12 @@
 class KconfigFrontends < Formula
   desc "Kernel configuration frontends and parser"
   homepage "http://ymorin.is-a-geek.org/projects/kconfig-frontends"
-  url "http://px4-travis.s3.amazonaws.com/toolchain/kconfig-frontends-3.7.0.0.tar.gz"
+  url "https://artifacts.px4.io/toolchain/kconfig-frontends-3.7.0.0.tar.gz"
   sha256 "a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9"
 
   bottle do
     # cellar :any
-    root_url "http://px4-travis.s3.amazonaws.com/toolchain/bottles"
+    root_url "https://artifacts.px4.io/toolchain/bottles"
     sha256 mavericks:   "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
     sha256 yosemite:    "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
     sha256 el_capitan:  "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
