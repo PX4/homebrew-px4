@@ -18,8 +18,8 @@ jobs:
         include:
           - formula: px4-dev
             build_target: px4_fmu-v5
-          #- formula: px4-sim-gazebo
-            #build_target: px4_sitl_default
+          - formula: px4-sim-gazebo
+            build_target: px4_sitl_default
 
     steps:
       - name: Checkout Homebrew tap
@@ -27,6 +27,11 @@ jobs:
         with:
           repository: px4/homebrew-px4
           path: homebrew-px4
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/Library/Caches/Homebrew
+          key: homebrew-cache-${{ runner.os }}
 
       - name: Update Homebrew
         run: brew update
@@ -57,6 +62,10 @@ jobs:
 
       - name: Add venv to PATH for subsequent steps
         run: echo "${{ github.workspace }}/px4-autopilot/venv/bin" >> "$GITHUB_PATH"
+
+      - name: Set GitHub Token for curl
+        run: |
+          echo "export HOMEBREW_GITHUB_API_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> $GITHUB_ENV
 
       - name: Install formula
         run: |
