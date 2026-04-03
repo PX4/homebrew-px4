@@ -2,12 +2,12 @@ class Hawkeye < Formula
   desc "Real-time 3D flight visualizer for PX4 with ULog replay and multi-drone analysis"
   homepage "https://github.com/PX4/Hawkeye"
   url "https://github.com/PX4/Hawkeye/releases/download/v0.2.0/hawkeye-0.2.0.tar.gz"
-  sha256 "ecdbef45201a7434ef8dc9eb6abf41450e347b003fca1e0202327f39f77d963f"
+  sha256 "c2ea9a3a597a86f7a74c76c90bdb44f3ef460410913d5d7299916452ca2c2bd1"
   license "BSD-3-Clause"
 
   bottle do
     root_url "https://github.com/PX4/Hawkeye/releases/download/v0.2.0"
-    sha256 cellar: :any_skip_relocation, arm64_sonoma: "0510972f8dbdfcaae3dc4b1e1061fde33a1a11f6e457387599e332718ddd40c8"
+    sha256 cellar: :any_skip_relocation, arm64_sonoma: "a5d583368ad2faf5e50c90ed4ac13e2f033c9132271ec46818e2b9123c547323"
   end
 
   depends_on "cmake" => :build
