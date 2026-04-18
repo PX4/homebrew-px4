@@ -187,9 +187,13 @@ jobs:
         uses: Homebrew/actions/setup-homebrew@master
 
       - name: Tap px4/px4 from this checkout
-        # brew bottle --merge needs the formula reachable by tap name.
-        # Tap the local checkout so edits land in the tree we commit from.
-        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
+        # setup-homebrew auto-taps px4/px4 from the remote, which
+        # points at this repo on GitHub instead of our local checkout.
+        # Untap and re-tap from the local path so brew bottle --merge
+        # --write edits land in the tree we commit from.
+        run: |
+          brew untap px4/px4 || true
+          brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
 
       - name: Upload bottles to rolling `bottles` release
         working-directory: homebrew-px4
