@@ -107,10 +107,22 @@ jobs:
           # cached bottle from a previous run on the same runner image.
           brew uninstall --force --ignore-dependencies "$formula" || true
 
+          # Any tap-local dependency also lacks a bottle, so
+          # --build-bottle on the target formula would refuse (brew
+          # won't fall back to source for tap deps under --build-bottle).
+          # Build each tap-local dependency with --build-bottle first so
+          # they exist as Cellar installs before we bottle the target.
+          # 'brew deps' surfaces the full recursive dep list; we filter
+          # to the px4/px4 tap only since homebrew-core deps always
+          # have bottles.
+          deps=$(brew deps --formula "px4/px4/$formula" | awk -F/ '/^px4\/px4\// && $NF != "'"$formula"'" {print}')
+          for dep in $deps; do
+            brew uninstall --force --ignore-dependencies "$dep" || true
+            brew install --build-bottle "$dep"
+          done
+
           # --build-bottle builds from source with bottle-safe prefix
-          # handling; --skip-post-install avoids running post steps that
-          # some formulas use for relocation stuff already handled by
-          # the bottle mechanism.
+          # handling.
           brew install --build-bottle "px4/px4/$formula"
 
           # `brew bottle --json` emits both the tarball and a JSON
