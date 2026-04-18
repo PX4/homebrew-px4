@@ -59,9 +59,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # macOS runner images. macos-14 and macos-15 are arm64.
-        # macos-13 is the last Intel runner; drop when no longer needed.
-        os: [macos-14, macos-15]
+        # Only target macos-latest. PX4-Autopilot's MacOS CI runs on
+        # macos-latest, and we don't publish bottles for older runners.
+        os: [macos-latest]
         formula:
           - asio@1.10.8
           - fastcdr
