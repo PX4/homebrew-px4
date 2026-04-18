@@ -14,16 +14,18 @@ name: Build and Publish Bottles
 #      workflow artifacts.
 #   2. `publish` (manual dispatch only): downloads all artifacts,
 #      uploads .tar.gz files to the rolling `bottles` release using
-#      --clobber, extracts sha256s from the .json files, opens a PR
-#      updating each formula's `bottle do` block.
+#      --clobber, runs `brew bottle --merge --write` to update each
+#      formula's `bottle do` block, and commits that directly to
+#      master. No PR review: the sha256s are deterministic outputs
+#      of the matrix that just ran, so human review would only delay
+#      `brew install` pouring.
 #
 # Triggers:
 #   - workflow_dispatch: manual trigger, optional formula filter
 #   - Optionally, a scheduled run to catch macOS runner image updates
 #
 # Token permissions:
-#   - `contents: write` to upload release assets
-#   - `pull-requests: write` to open the sha256-update PR
+#   - `contents: write` to upload release assets and push to master
 
 on:
   workflow_dispatch:
@@ -33,7 +35,7 @@ on:
         required: false
         default: "asio@1.10.8 fastcdr foonathan-memory fastdds kconfig-frontends"
       publish:
-        description: "Upload bottles to the `bottles` release and open sha-update PR"
+        description: "Upload bottles to the `bottles` release and commit sha256 refresh to master"
         required: false
         default: "false"
         type: choice
@@ -51,7 +53,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   build:
@@ -210,7 +211,7 @@ jobs:
             gh release upload bottles "$f" --clobber
           done
 
-      - name: Open PR updating `bottle do` blocks
+      - name: Commit updated `bottle do` blocks directly to master
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -225,25 +226,25 @@ jobs:
             brew bottle --merge --write --no-commit "$json"
           done
 
-          # Branch off master, commit, push, open PR.
-          branch="bot/bottle-refresh-$(date -u +%Y%m%d-%H%M%S)"
           git config user.name "px4-bottle-bot"
           git config user.email "bottles@px4.io"
-          git checkout -b "$branch"
           git add Formula/
           if git diff --cached --quiet; then
-            echo "No formula changes; sha256s already match."
+            echo "No formula changes; sha256s already match published bottles."
             exit 0
           fi
           git commit -m "bottles: refresh sha256s from latest bottle build"
-          # setup-homebrew sets origin to a plain HTTPS URL without
+
+          # setup-homebrew set origin to a plain HTTPS URL without
           # auth. Rewrite origin to embed GITHUB_TOKEN so push works
           # for the bot. x-access-token is the documented user name
           # for GITHUB_TOKEN-based HTTPS auth.
           git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git push origin "$branch"
-          gh pr create \
-            --title "bottles: refresh sha256s" \
-            --body "Automated bottle refresh from the Build and Publish Bottles workflow. Bottle tarballs were uploaded to the rolling \`bottles\` release; this PR updates the \`bottle do\` blocks in each formula so \`brew install\` pours from the new tarballs." \
-            --base master \
-            --head "$branch"
+
+          # Push straight to master. Bot-authored sha256 refreshes
+          # for bottles we just published don't need PR review: the
+          # tarballs are immutable in the `bottles` release, the
+          # sha256s are deterministic outputs of the matrix that
+          # just ran, and gating on human review would only serve
+          # to delay `brew install` pouring vs. compiling.
+          git push origin HEAD:master
