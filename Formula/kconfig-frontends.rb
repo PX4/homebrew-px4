@@ -5,14 +5,8 @@ class KconfigFrontends < Formula
   sha256 "a0d9b6565cf671337d0d570da872cc3847ce0c8355f7208807121d0c2fdddea9"
 
   bottle do
-    # cellar :any
-    root_url "https://artifacts.px4.io/toolchain/bottles"
-    sha256 mavericks:   "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
-    sha256 yosemite:    "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
-    sha256 el_capitan:  "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
-    sha256 sierra:      "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
-    sha256 high_sierra: "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
-    sha256 mojave:      "9c02a28ea1c55253299560fbac6b7772425cc194f30fae5e055c6c9a664e1a08"
+    root_url "https://github.com/PX4/homebrew-px4/releases/download/bottles"
+    sha256 cellar: :any, arm64_sequoia: "d25f6ae3f3e602d9b9f498c2de0f374e84ca2d5f1ad2a696496ed39cbd358ef3"
   end
 
   depends_on "autoconf" => :build

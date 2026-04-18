@@ -5,6 +5,11 @@ class AsioAT1108 < Formula
   sha256 "26deedaebbed062141786db8cfce54e77f06588374d08cccf11c02de1da1ed49"
   license "BSL-1.0"
   head "https://github.com/chriskohlhoff/asio.git"
+
+  bottle do
+    root_url "https://github.com/PX4/homebrew-px4/releases/download/bottles"
+    sha256 cellar: :any, arm64_sequoia: "db2f9c782cc80f3257e0e98b7c56d0da2c2ad1890436466ea308cb7410e9107d"
+  end
   keg_only :versioned_formula
 
   depends_on "autoconf" => :build

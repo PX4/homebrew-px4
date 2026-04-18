@@ -5,6 +5,11 @@ class FoonathanMemory < Formula
   sha256 "19eb61c5cba6ccc40b8ee741350fd29402a46641ba752c30b7079528d87dbc79"
   license "Zlib"
 
+  bottle do
+    root_url "https://github.com/PX4/homebrew-px4/releases/download/bottles"
+    sha256 cellar: :any_skip_relocation, arm64_sequoia: "3238c1ca1acf2776d530e2556afbc0b3a0a5cda4db9b655b6b993472095ad43b"
+  end
+
   depends_on "cmake" => :build
 
   def install

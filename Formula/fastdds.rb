@@ -5,6 +5,11 @@ class Fastdds < Formula
   sha256 "d8c87e84c41a5628cc41658476137b6a392f218b844a6f5e2ff5d8c359fd5b10"
   license "Apache-2.0"
 
+  bottle do
+    root_url "https://github.com/PX4/homebrew-px4/releases/download/bottles"
+    sha256 cellar: :any, arm64_sequoia: "41f0cc0089a369b396f1f3c51231fbc0e5ac330d6b51d10a40c39c267ec5d718"
+  end
+
   depends_on "cmake" => :build
   depends_on "asio@1.10.8"
   depends_on "fastcdr"
