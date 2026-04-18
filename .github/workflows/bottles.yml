@@ -160,10 +160,17 @@ jobs:
     name: Publish bottles to GitHub Release
     needs: build
     if: inputs.publish == 'true'
-    runs-on: ubuntu-24.04
+    # Run on macOS so `brew bottle --merge --write` is available to
+    # rewrite the Formula/*.rb files. Ubuntu runners don't ship brew.
+    runs-on: macos-latest
     steps:
       - name: Checkout tap
         uses: actions/checkout@v4
+        with:
+          # Need full history + write perms on the branch so the PR step
+          # can push a new branch. actions/checkout default is fine here
+          # since GITHUB_TOKEN has `contents: write` from job permissions.
+          path: homebrew-px4
 
       - name: Download all bottle artifacts
         uses: actions/download-artifact@v4
@@ -175,7 +182,14 @@ jobs:
       - name: List downloaded bottles
         run: ls -la bottles-in/
 
+      - name: Tap px4/px4 from this checkout
+        # brew bottle --merge needs the formula to be reachable via its
+        # tap name. Tap the local checkout so edits land in the tree
+        # we'll commit from.
+        run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
+
       - name: Upload bottles to rolling `bottles` release
+        working-directory: homebrew-px4
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -191,39 +205,22 @@ jobs:
           # Upload every bottle tarball (brew looks up by filename).
           # --clobber overwrites existing assets with the same name, so
           # re-running for the same version just updates the tarball.
-          for f in bottles-in/*.bottle.tar.gz; do
+          for f in ../bottles-in/*.bottle.tar.gz; do
             gh release upload bottles "$f" --clobber
           done
 
-      - name: Extract sha256s into a single JSON summary
-        run: |
-          set -euxo pipefail
-          # The *.bottle.json files describe each bottle. Merge them so
-          # the PR-opening step can see everything in one place.
-          python3 - <<'PY'
-          import glob, json, pathlib
-          merged = {}
-          for p in sorted(glob.glob("bottles-in/*.bottle.json")):
-              with open(p) as fh:
-                  data = json.load(fh)
-              # Top-level key is the formula full name (e.g. "px4/px4/fastdds").
-              for formula_name, info in data.items():
-                  merged.setdefault(formula_name, {}).update(info)
-          pathlib.Path("bottles-summary.json").write_text(json.dumps(merged, indent=2, sort_keys=True))
-          print(pathlib.Path("bottles-summary.json").read_text())
-          PY
-
       - name: Open PR updating `bottle do` blocks
+        working-directory: homebrew-px4
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euxo pipefail
 
-          # brew itself can rewrite the sha256 lines in each Formula
-          # given the .json descriptors, but we call it explicitly per
-          # formula so the PR diff is minimal and reviewable.
-          for json in bottles-in/*.bottle.json; do
-            brew bottle --merge --write --no-commit "$json" || true
+          # brew bottle --merge --write rewrites the sha256 + root_url
+          # lines in each formula from the matching JSON descriptor.
+          # --no-commit so we control the commit via git below.
+          for json in ../bottles-in/*.bottle.json; do
+            brew bottle --merge --write --no-commit "$json"
           done
 
           # Branch off master, commit, push, open PR.
