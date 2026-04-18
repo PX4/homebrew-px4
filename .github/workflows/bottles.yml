@@ -166,10 +166,13 @@ jobs:
     # publish step.
     runs-on: ubuntu-24.04
     steps:
+      # Checkout lands at $GITHUB_WORKSPACE (the default path).
+      # Homebrew/actions/setup-homebrew symlinks px4/px4 from that
+      # exact path into its tap directory, so we need the checkout at
+      # the default location, not a subdir, for the tap to resolve to
+      # the tree we commit from.
       - name: Checkout tap
         uses: actions/checkout@v4
-        with:
-          path: homebrew-px4
 
       - name: Download all bottle artifacts
         uses: actions/download-artifact@v4
@@ -182,21 +185,15 @@ jobs:
         run: ls -la bottles-in/
 
       - name: Set up Homebrew
-        # Provides `brew` on Ubuntu so `brew bottle --merge --write`
-        # can rewrite Formula/*.rb from the JSON descriptors.
+        # Provides `brew` on Ubuntu and auto-taps px4/px4 from our
+        # checkout so `brew bottle --merge --write` can resolve and
+        # edit the formulas in the tree we commit from. No separate
+        # `brew tap` step needed; trying to re-tap triggers a
+        # "remote mismatch" error or (worse) deletes our checkout on
+        # `brew untap` since the tap is a symlink into it.
         uses: Homebrew/actions/setup-homebrew@master
 
-      - name: Tap px4/px4 from this checkout
-        # setup-homebrew auto-taps px4/px4 from the remote, which
-        # points at this repo on GitHub instead of our local checkout.
-        # Untap and re-tap from the local path so brew bottle --merge
-        # --write edits land in the tree we commit from.
-        run: |
-          brew untap px4/px4 || true
-          brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
-
       - name: Upload bottles to rolling `bottles` release
-        working-directory: homebrew-px4
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -212,12 +209,11 @@ jobs:
           # Upload every bottle tarball (brew looks up by filename).
           # --clobber overwrites existing assets with the same name, so
           # re-running for the same version just updates the tarball.
-          for f in ../bottles-in/*.bottle.tar.gz; do
+          for f in bottles-in/*.bottle.tar.gz; do
             gh release upload bottles "$f" --clobber
           done
 
       - name: Open PR updating `bottle do` blocks
-        working-directory: homebrew-px4
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -225,8 +221,10 @@ jobs:
 
           # brew bottle --merge --write rewrites the sha256 + root_url
           # lines in each formula from the matching JSON descriptor.
-          # --no-commit so we control the commit via git below.
-          for json in ../bottles-in/*.bottle.json; do
+          # --no-commit so we control the commit via git below. Because
+          # setup-homebrew tapped px4/px4 from this workspace, the
+          # edits land on the checkout we commit from.
+          for json in bottles-in/*.bottle.json; do
             brew bottle --merge --write --no-commit "$json"
           done
 
