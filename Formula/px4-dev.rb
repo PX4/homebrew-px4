@@ -10,7 +10,6 @@ class Px4Dev < Formula
   depends_on "bash-completion"
   depends_on "ccache"
   depends_on "cmake"
-  depends_on "discoteq/discoteq/flock"
   depends_on "fastdds"
   depends_on "genromfs"
   depends_on "kconfig-frontends"
