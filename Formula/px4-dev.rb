@@ -1,55 +1,61 @@
 class Px4Dev < Formula
-  desc "PX4 development toolchain"
-  homepage "https://px4.io"
-  url "https://raw.githubusercontent.com/PX4/PX4-Autopilot/main/Tools/px4.py"
-  version "1.16.0"
-  sha256 "7fc8a739658212cea302f446ef31c60babb5928ce98c9d990617f039e0da9ada"
+  desc "PX4 development toolchain (deprecated no-op meta-formula)"
+  homepage "https://github.com/PX4/PX4-Autopilot"
+  url "https://raw.githubusercontent.com/PX4/homebrew-px4/master/README.md"
+  version "1.16.1"
+  sha256 "67dba75ba1ab3c958b0a059b02828a2b957b55d8916fb041a05d7edcc9b6d41a"
 
-  depends_on "ant"
-  depends_on "astyle"
-  depends_on "bash-completion"
-  depends_on "ccache"
-  depends_on "cmake"
-  depends_on "discoteq/discoteq/flock"
-  depends_on "fastdds"
-  depends_on "genromfs"
-  depends_on "kconfig-frontends"
-  depends_on "ncurses"
-  depends_on "ninja"
-  depends_on "osx-cross/arm/arm-gcc-bin@13"
-  depends_on "python"
-  depends_on "python-tk"
+  # This formula is intentionally a no-op as of April 2026.
+  #
+  # Historical context:
+  # px4-dev used to be a meta-formula that pulled the full macOS PX4
+  # toolchain in via depends_on, including cross-tap deps like
+  # osx-cross/arm/arm-gcc-bin@13 and discoteq/discoteq/flock.
+  #
+  # In April 2026 Homebrew 4.5 stopped auto-tapping cross-tap
+  # dependencies (a security and performance change). Any formula
+  # whose dependency list names a third-party tap now aborts
+  # resolution unless every needed tap has been added beforehand.
+  # Homebrew also disallows `brew tap` from inside formula install
+  # blocks (audit error), so the formula cannot self-heal.
+  #
+  # The PX4 toolchain install path now lives entirely in
+  # Tools/setup/macos.sh in PX4-Autopilot, which taps osx-cross/arm
+  # and PX4/px4 explicitly and then calls brew install on the real
+  # packages. This formula is kept as a no-op so that older copies of
+  # macos.sh, cached Docker images, and third-party tutorials that
+  # still run `brew install px4-dev` don't error out — they just get
+  # a harmless no-op.
+  #
+  # See PX4/PX4-Autopilot PR #27127 for the migration.
 
   def install
-    # Patch px4.py to use HTTPS for remote tag lookup instead of SSH
-    inreplace "px4.py",
-              "git@github.com:PX4/PX4-Autopilot.git",
-              "https://github.com/PX4/PX4-Autopilot.git"
+    (prefix/"DEPRECATED.md").write <<~DOC
+      px4-dev is a no-op formula kept for backward compatibility.
 
-    # Install the px4 script
-    bin.install "px4.py"
-    ohai "PX4 Toolchain Installed"
+      The PX4 macOS toolchain is now installed by Tools/setup/macos.sh
+      in the PX4-Autopilot repository, which taps osx-cross/arm and
+      PX4/px4 explicitly and calls brew install on the real packages.
+
+      See: https://github.com/PX4/PX4-Autopilot/blob/main/Tools/setup/macos.sh
+    DOC
   end
 
   def caveats
     <<~EOS
-      The PX4 development toolchain has been installed, including the ARM cross-compiler
-      from the osx-cross/arm tap (arm-gcc-bin@13).
+      px4-dev is deprecated and does nothing.
 
-      Homebrew does not link versioned formulae by default, so you must link the compiler manually
+      Install the PX4 toolchain via Tools/setup/macos.sh in the
+      PX4-Autopilot repository:
 
-          brew link --overwrite --force arm-gcc-bin@13
+          ./Tools/setup/macos.sh
 
-      If you have other versions of arm-none-eabi-gcc installed, this may override them.
-      You can unlink it manually with:
-
-          brew unlink arm-gcc-bin@13
+      That script taps osx-cross/arm and PX4/px4, then installs the
+      required packages directly — the work this formula used to do.
     EOS
   end
 
   test do
-    # Ensure the script runs without SSH errors and prints release info
-    output = shell_output("#{bin}/px4.py")
-    assert_match(/PX4 Release/, output)
+    assert_path_exists prefix/"DEPRECATED.md"
   end
 end
