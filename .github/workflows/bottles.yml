@@ -166,14 +166,20 @@ jobs:
     # publish step.
     runs-on: ubuntu-24.04
     steps:
-      # Checkout lands at $GITHUB_WORKSPACE (the default path).
-      # Homebrew/actions/setup-homebrew symlinks px4/px4 from that
-      # exact path into its tap directory, so we need the checkout at
-      # the default location, not a subdir, for the tap to resolve to
-      # the tree we commit from.
-      - name: Checkout tap
-        uses: actions/checkout@v4
+      # Homebrew/actions/setup-homebrew clones the tap repo into
+      # $GITHUB_WORKSPACE itself (after `rm -rf` on anything already
+      # there, see the action's main.sh). That replaces what
+      # actions/checkout would have produced, so a separate checkout
+      # step is redundant AND unsafe: its output gets wiped.
+      #
+      # It also symlinks Library/Taps/px4/homebrew-px4 -> $GITHUB_WORKSPACE
+      # so brew can resolve our formulas by tap name while edits land
+      # on the tree we commit from.
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
 
+      # Download AFTER setup-homebrew so bottles-in/ isn't wiped by
+      # setup-homebrew's `rm -rf "$GITHUB_WORKSPACE"/*`.
       - name: Download all bottle artifacts
         uses: actions/download-artifact@v4
         with:
@@ -183,15 +189,6 @@ jobs:
 
       - name: List downloaded bottles
         run: ls -la bottles-in/
-
-      - name: Set up Homebrew
-        # Provides `brew` on Ubuntu and auto-taps px4/px4 from our
-        # checkout so `brew bottle --merge --write` can resolve and
-        # edit the formulas in the tree we commit from. No separate
-        # `brew tap` step needed; trying to re-tap triggers a
-        # "remote mismatch" error or (worse) deletes our checkout on
-        # `brew untap` since the tap is a symlink into it.
-        uses: Homebrew/actions/setup-homebrew@master
 
       - name: Upload bottles to rolling `bottles` release
         env:
@@ -239,6 +236,11 @@ jobs:
             exit 0
           fi
           git commit -m "bottles: refresh sha256s from latest bottle build"
+          # setup-homebrew sets origin to a plain HTTPS URL without
+          # auth. Rewrite origin to embed GITHUB_TOKEN so push works
+          # for the bot. x-access-token is the documented user name
+          # for GITHUB_TOKEN-based HTTPS auth.
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           git push origin "$branch"
           gh pr create \
             --title "bottles: refresh sha256s" \
