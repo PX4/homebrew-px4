@@ -160,16 +160,15 @@ jobs:
     name: Publish bottles to GitHub Release
     needs: build
     if: inputs.publish == 'true'
-    # Run on macOS so `brew bottle --merge --write` is available to
-    # rewrite the Formula/*.rb files. Ubuntu runners don't ship brew.
-    runs-on: macos-latest
+    # Ubuntu runner is ~10x cheaper per minute than macOS. brew isn't
+    # pre-installed on Ubuntu, so we set it up via the Homebrew action.
+    # Net cost is still lower than macos-latest for this rarely-run
+    # publish step.
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout tap
         uses: actions/checkout@v4
         with:
-          # Need full history + write perms on the branch so the PR step
-          # can push a new branch. actions/checkout default is fine here
-          # since GITHUB_TOKEN has `contents: write` from job permissions.
           path: homebrew-px4
 
       - name: Download all bottle artifacts
@@ -182,10 +181,14 @@ jobs:
       - name: List downloaded bottles
         run: ls -la bottles-in/
 
+      - name: Set up Homebrew
+        # Provides `brew` on Ubuntu so `brew bottle --merge --write`
+        # can rewrite Formula/*.rb from the JSON descriptors.
+        uses: Homebrew/actions/setup-homebrew@master
+
       - name: Tap px4/px4 from this checkout
-        # brew bottle --merge needs the formula to be reachable via its
-        # tap name. Tap the local checkout so edits land in the tree
-        # we'll commit from.
+        # brew bottle --merge needs the formula reachable by tap name.
+        # Tap the local checkout so edits land in the tree we commit from.
         run: brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
 
       - name: Upload bottles to rolling `bottles` release
