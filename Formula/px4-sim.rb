@@ -24,7 +24,16 @@ class Px4Sim < Formula
   #
   # See PX4/homebrew-px4 PR #104 for the matching px4-dev deprecation.
 
+  deprecate! date: "2026-04-20", because: "simulation toolchain is installed via Tools/setup/macos.sh --sim-tools"
+
   def install
+    opoo "px4-sim is deprecated and installs nothing."
+    opoo "Run ./Tools/setup/macos.sh --sim-tools from PX4-Autopilot to " \
+         "install the simulation toolchain."
+    opoo "If you relied on px4-sim to pull in px4-sim-gazebo or " \
+         "px4-sim-jmavsim, 'brew autoremove' may uninstall them. " \
+         "Reinstall them explicitly if you still need them."
+
     (prefix/"DEPRECATED.md").write <<~DOC
       px4-sim is a no-op formula kept for backward compatibility.
 
