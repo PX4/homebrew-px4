@@ -29,7 +29,16 @@ class Px4Dev < Formula
   #
   # See PX4/PX4-Autopilot PR #27127 for the migration.
 
+  deprecate! date: "2026-04-20", because: "macOS toolchain is installed via Tools/setup/macos.sh in PX4-Autopilot"
+
   def install
+    opoo "px4-dev is deprecated and installs nothing."
+    opoo "Run ./Tools/setup/macos.sh from PX4-Autopilot to install the " \
+         "PX4 development toolchain."
+    opoo "If you relied on px4-dev to pull in arm-gcc-bin@13 or other " \
+         "toolchain packages, install them directly or via macos.sh. " \
+         "'brew autoremove' may uninstall them otherwise."
+
     (prefix/"DEPRECATED.md").write <<~DOC
       px4-dev is a no-op formula kept for backward compatibility.
 
