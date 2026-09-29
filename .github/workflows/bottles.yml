@@ -177,7 +177,7 @@ jobs:
       # so brew can resolve our formulas by tap name while edits land
       # on the tree we commit from.
       - name: Set up Homebrew
-        uses: Homebrew/actions/setup-homebrew@master
+        uses: Homebrew/actions/setup-homebrew@main
 
       # Download AFTER setup-homebrew so bottles-in/ isn't wiped by
       # setup-homebrew's `rm -rf "$GITHUB_WORKSPACE"/*`.
