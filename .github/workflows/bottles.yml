@@ -88,6 +88,8 @@ jobs:
       - name: Tap px4/px4 from this checkout
         run: |
           brew tap px4/px4 "${{ github.workspace }}/homebrew-px4"
+          # Homebrew refuses to load formulae from a non-official tap until it is trusted.
+          brew trust --tap px4/px4
 
       - name: Tap cross-tap dependencies
         # Some formulas (asio@1.10.8 depends on boost@1.85) use upstream
@@ -178,6 +180,11 @@ jobs:
       # on the tree we commit from.
       - name: Set up Homebrew
         uses: Homebrew/actions/setup-homebrew@main
+
+      # Homebrew refuses to load formulae from a non-official tap until it is trusted,
+      # and `brew bottle --merge --write` below loads every formula it rewrites.
+      - name: Trust px4/px4
+        run: brew trust --tap px4/px4
 
       # Download AFTER setup-homebrew so bottles-in/ isn't wiped by
       # setup-homebrew's `rm -rf "$GITHUB_WORKSPACE"/*`.

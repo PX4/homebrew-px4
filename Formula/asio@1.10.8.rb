@@ -30,7 +30,7 @@ class AsioAT1108 < Formula
       --disable-dependency-tracking
       --disable-silent-rules
       --prefix=#{prefix}
-      --with-boost=#{Formula["boost"].opt_include}
+      --with-boost=#{formula_opt_include("boost")}
     ]
     system "./configure", *args
 
